@@ -1,51 +1,37 @@
-//
-//  main.cpp
-//  Wrapper
-//
-//  Created by Haoru Zhao on 1/8/13.
-//  Copyright (c) 2013 Haoru Zhao. All rights reserved.
-//
+/* 
+ * File:   main.cpp
+ * Author: haoruzhao
+ *
+ * Created on January 14, 2013, 6:26 PM
+ */
 
+#include "SortTemplates.h"
 #include <iostream>
-using namespace std;
+#include <vector>
 
-template<typename Comparable>
-class Pointer{
-public:
-    explicit Pointer( Comparable *rhs = NULL)
-    :pointee( rhs ){
-        
-    }
-    bool operator<(const Pointer &rhs) const{
-        return *pointee < *rhs.pointee;
-    }
-    
-    operator Comparable * () const{
-        return pointee;
-    }
-    
-    Comparable * get() const{
-        return pointee;
-    }
-    
-private:
-    Comparable *pointee;
-};
+using std::cout;
+using std::vector;
+/*
+ * 
+ */
+int main(int argc, char** argv) {
 
-bool operator!= (const Pointer<int> &lhs, const Pointer<int> &rhs){
-    return lhs < rhs || rhs < lhs;
-}
-
-int main(int argc, const char * argv[])
-{
-    int* p = new int(3);
-    Pointer<int> q( new int(4));
+    cout<<"hello world!";
+    vector<int> a;
+    //3, 7, 4, -1, 9, 5, 2, 6, 1
+    a.push_back(3);
+    a.push_back(7);
+    a.push_back(4);
+    a.push_back(-1);
+    a.push_back(9);
+    a.push_back(5);
+    a.push_back(2);
+    a.push_back(6);
+    a.push_back(1);
+    BubbleSort(a);
+    //InsertionSort(a);
+    Display(a);
     
-    if(q != p)
-        cout << "this is differet"<< endl;
-
-    // insert code here...
-    std::cout << "Hello, World!\n";
     return 0;
 }
 
