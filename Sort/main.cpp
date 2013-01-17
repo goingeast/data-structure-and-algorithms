@@ -28,7 +28,9 @@ int main(int argc, char** argv) {
     a.push_back(2);
     a.push_back(6);
     a.push_back(1);
-    Shellsort(a);
+    MergeSort(a);
+    //Quicksort(a);
+    //Shellsort(a);
 //    SelectionSort(a);
     //BubbleSort(a);
     //InsertionSort(a);

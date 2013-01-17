@@ -82,7 +82,7 @@ void Shellsort(vector<Comparable>& a){
         for( i = gap; i < size; ++i){
             Comparable key = a[i];
             j = i;
-            while(j > 0 && a[j-gap] > key){
+            while(j > 0 && a[j - gap] > key){
                 a[j] = a[j - gap];
                 j -= gap;
             }
@@ -91,7 +91,76 @@ void Shellsort(vector<Comparable>& a){
     }
 }
 // Merge sort
+template<typename Comparable>
+void Merge(vector<Comparable>& a, vector<Comparable>& temp,int left, int mid, int right){
+  
+    int i, j, k, leftPos = left, rightPos = mid+1;
+    for(i = left; i <= right; ++i){
+        temp[i] = a[i];
+    }
+    
+    int Pos = left;
+    while(leftPos <= mid && rightPos <= right){
+        if(temp[leftPos] <= temp[rightPos]){
+            a[Pos++] = temp[leftPos++];
+        }else{
+            a[Pos++] = temp[rightPos++];
+        }
+    }
+    
+    while(rightPos <= right){
+        a[Pos++] = temp[rightPos++];
+    }
+    while(leftPos <= mid){
+        a[Pos++] = temp[leftPos++];
+    }
+}
+template<typename Comparable>
+void MergeSort(vector<Comparable>& a, vector<Comparable>& temp, int left, int right){
+    // terminal condition
+    if(left < right){
+        int mid = (left+right)/2;
+        MergeSort(a,temp, left, mid);
+        MergeSort(a,temp, mid+1,right);
+        Merge(a, temp, left, mid, right);
+    }
+}
+
+template<typename Comparable>
+void MergeSort(vector<Comparable>& a){
+    vector<Comparable> temp(a.size());
+    MergeSort(a, temp, 0, a.size() - 1 );
+}
 // Quicksort
+//1. choose pivot
+//2. partition
+//3. do quicksort(first part) quicksort(second)
+template<typename Comparable>
+void Quicksort(vector<Comparable>& a, int left, int right){
+    // pivot
+    int i= left, j = right, temp;
+    int pivot = a[(right+left)/2]; // safe choose
+    // partition
+    while(i <= j){
+        while(a[i] < pivot){ i++;}
+        while(a[j] > pivot){ j--;}
+        if(i <= j){
+            temp = a[i];
+            a[i] = a[j];
+            a[j] = temp;
+            i++;
+            j--;
+        }
+    }
+    if(left < j)
+        Quicksort(a, left, j);
+    if(right > i)
+        Quicksort(a, i, right);
+}
+template<typename Comparable>
+void Quicksort(vector<Comparable>& a){
+    Quicksort(a, 0, a.size()-1);
+}
 // Heapsort
 
 
