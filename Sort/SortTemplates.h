@@ -43,7 +43,6 @@ void BubbleSort(vector<Comparable>& a){
     int i,j, temp;
     int size = a.size();
     bool Swapped = false;
-    
     while( !Swapped ){
         Swapped = true;
         for(j = 1; j < size; ++j){
@@ -58,7 +57,39 @@ void BubbleSort(vector<Comparable>& a){
     }
 }
 // Selection sort
+template<typename Comparable>
+void SelectionSort(vector<Comparable>& a){
+    int i,j,temp,pos;
+    int size = a.size();
+    for(i = 0; i < size; ++i){
+        pos = i;
+        for(j = i + 1; j < size; ++j){
+            if(a[j] < a[pos]){
+                pos = j;
+            }
+        }
+        temp = a[pos];
+        a[pos] = a[i];
+        a[i] = temp;
+    }
+}
 // Shell sort
+template<typename Comparable>
+void Shellsort(vector<Comparable>& a){
+    int i,j,gap;
+    int size = a.size();
+    for(gap = size/2; gap > 0; gap = (gap==2 ? 1 : gap/2.2)){
+        for( i = gap; i < size; ++i){
+            Comparable key = a[i];
+            j = i;
+            while(j > 0 && a[j-gap] > key){
+                a[j] = a[j - gap];
+                j -= gap;
+            }
+            a[j] = key;
+        }
+    }
+}
 // Merge sort
 // Quicksort
 // Heapsort
