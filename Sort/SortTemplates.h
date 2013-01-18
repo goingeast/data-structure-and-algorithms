@@ -73,7 +73,7 @@ void SelectionSort(vector<Comparable>& a){
         a[i] = temp;
     }
 }
-// Shell sort
+// Shell sort, modify insertion sort
 template<typename Comparable>
 void Shellsort(vector<Comparable>& a){
     int i,j,gap;
@@ -93,13 +93,11 @@ void Shellsort(vector<Comparable>& a){
 // Merge sort
 template<typename Comparable>
 void Merge(vector<Comparable>& a, vector<Comparable>& temp,int left, int mid, int right){
-  
-    int i, j, k, leftPos = left, rightPos = mid+1;
+  // left -- mid, mid+1 -- right
+    int i, Pos = left, leftPos = left, rightPos = mid + 1;
     for(i = left; i <= right; ++i){
         temp[i] = a[i];
     }
-    
-    int Pos = left;
     while(leftPos <= mid && rightPos <= right){
         if(temp[leftPos] <= temp[rightPos]){
             a[Pos++] = temp[leftPos++];
@@ -162,13 +160,51 @@ void Quicksort(vector<Comparable>& a){
     Quicksort(a, 0, a.size()-1);
 }
 // Heapsort
+/*a heap is a specialized tree-based data structure that satisfies the heap property
+ *: if A is parent node of B, then key(A) is ordered with respect to key(B) with the
+ * same ordering applying across the heap. Either the keys of parent nodes are always
+ * greater than or equal to those of the children and the highest key is in the root
+ * node(max heap) or the keys of parent nodes are less or equal to those of the children
+ * (min heap).
+*/
+/*Binary heap: created using a binary tree, it can be seen as a binary tree with
+ two constraints
+ 1. The shape property. the tree is a complete binary tree; that is, all levels
+  of the tree, except possibly the last one are fully filled, and if the last level
+  is not complete, the nodes of that level are filled from left to right
+ 2. the heap property, each node is greater than or equal to each of its children 
+ according to a comparison predicate defined for the data structure*/
 
+// Comb Sort modify bubble sort
+template<typename Comparable>
+void Combsort(vector<Comparable>& a){
+    int i, j, gap = 0, size = a.size();
+    Comparable temp;
+    bool swapped;
+    for(gap = size/1.25; gap > 0; gap = (gap == 2 ? 1:gap/1.25) ){
+        swapped = false;
+        while(!swapped){
+            swapped = true;
+            for(i = 0; i+gap < size; ++i ){
+                if(a[i] > a[i + gap]){
+                    temp = a[i];
+                    a[i] = a[i + gap];
+                    a[i + gap] = temp;
+                    swapped = false;
+                }
+            }
+        }
+    }
+}
 
-// Comb Sort
+/*these three algorithms need more info*/
 // Counting sort
 // Radix sort
 // Bucket sort
+
 // Distribution sort
 // Timsort
+
+//large mount of data sort, please refer to: http://en.wikipedia.org/wiki/External_sorting
 #endif	/* SORTTEMPLATES_H */
 
