@@ -22,13 +22,15 @@ int main(int argc, char** argv) {
     a.push_back(3);
     a.push_back(7);
     a.push_back(4);
-    a.push_back(-1);
+    a.push_back(-2);
     a.push_back(9);
     a.push_back(5);
     a.push_back(2);
     a.push_back(6);
     a.push_back(1);
-    MergeSort(a);
+    Countingsort(a);
+    //Combsort(a);
+    //MergeSort();
     //Quicksort(a);
     //Shellsort(a);
 //    SelectionSort(a);

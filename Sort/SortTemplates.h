@@ -197,8 +197,31 @@ void Combsort(vector<Comparable>& a){
     }
 }
 
-/*these three algorithms need more info*/
+////////////////////todo tmr: /*these three algorithms need more info*/
 // Counting sort
+// new a vector, size is the max element in th
+template<typename Comparable>
+void Countingsort(vector<Comparable>& a){
+    Comparable min = a[0], max = a[0];
+    int i, j, size = a.size();
+    
+    for(i = 1; i < size; ++i){
+        if(a[i] > max){
+            max = a[i];
+        }else if(a[i] < min){
+            min = a[i];
+        }
+    }
+    vector<Comparable> temp(max - min + 1, 0); // create a vector
+    for(i = 0; i < size; ++i){ // counting
+        temp[a[i] - min] +=1;
+    }
+    for(i = 0, j = 0; i < temp.size(); ++i){ // 
+        while(temp[i]--){
+            a[j++] = i + min;
+        }
+    }
+}
 // Radix sort
 // Bucket sort
 
