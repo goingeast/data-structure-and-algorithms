@@ -227,7 +227,7 @@ void Countingsort(vector<Comparable>& a){
 
 // Distribution sort
 // Timsort
-
+// large objects sort, indirect sort using pointer
 //large mount of data sort, please refer to: http://en.wikipedia.org/wiki/External_sorting
 #endif	/* SORTTEMPLATES_H */
 
