@@ -3,7 +3,7 @@
 #include <iostream>
 using namespace std;
 
-template<class dataField>
+template<typename dataField>
 class Stack{
 public:
 	Stack();
@@ -24,36 +24,34 @@ private:
 
 		StackNode(const dataField &theElement, StackNode* n =NULL )
 			: element( theElement ), next( n ) { }
-
-		
 	};
 	StackNode* topOfStack; 
 };
 
-template<class dataField>
+template<typename dataField>
 Stack<dataField>::Stack()
 	:topOfStack(NULL){
 
 }
 
-template<class dataField>
+template<typename dataField>
 Stack<dataField>::Stack(const Stack& rhs){
 	topOfStack = NULL;
 	*this=rhs;
 }
 
-template<class dataField>
+template<typename dataField>
 Stack<dataField>::~Stack(){
 	MakeEmpty();
 }
 
 
-template<class dataField>
+template<typename dataField>
 bool Stack<dataField>::isEmpty() const{
 	return topOfStack == NULL;
 }
 
-template<class dataField>
+template<typename dataField>
 const dataField& Stack<dataField>::Top() const
 {
 	if (!isEmpty())
@@ -66,7 +64,7 @@ const dataField& Stack<dataField>::Top() const
 	
 }
 
-template<class dataField>
+template<typename dataField>
 void Stack<dataField>::MakeEmpty(){
 	while (!isEmpty())
 	{
@@ -74,7 +72,7 @@ void Stack<dataField>::MakeEmpty(){
 	}
 }
 
-template<class dataField>
+template<typename dataField>
 void Stack<dataField>::Pop(){
 	if (!isEmpty())
 	{
@@ -86,12 +84,12 @@ void Stack<dataField>::Pop(){
 	}
 }
 
-template<class dataField>
+template<typename dataField>
 void Stack<dataField>::Push(const dataField &x){
 	topOfStack = new StackNode(x, topOfStack);
 }
 
-template<class dataField>
+template<typename dataField>
 dataField Stack<dataField>::TopAndPop(){
 	
 	dataField item = Top();
@@ -99,11 +97,11 @@ dataField Stack<dataField>::TopAndPop(){
 	return item;
 }
 
-template<class dataField>
+template<typename dataField>
 const Stack<dataField> & Stack<dataField>::operator=( const Stack & rhs ){
 	if (this != rhs)
 	{
-		MakeEmpty()
+		MakeEmpty();
 		if (rhs.isEmpty())
 		{
 			return *this;

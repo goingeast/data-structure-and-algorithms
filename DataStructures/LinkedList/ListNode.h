@@ -8,7 +8,9 @@
 
 #ifndef LinkedList_listNode_h
 #define LinkedList_listNode_h
-template<class value_type>
+#include <iostream>
+
+template<typename value_type>
 class listNode 
 {
     //friend class linkedList;

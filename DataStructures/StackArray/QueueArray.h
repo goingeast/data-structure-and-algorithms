@@ -1,12 +1,15 @@
 #ifndef QUEUE_ARRAY_H
 #define QUEUE_ARRAY_H
 #include <vector>
+#include <iostream>
+using std::vector;
+using std::cout;
 // use circular array implementation
 // when array is full, move front to the corresponding end of array
-template<class dataField>
-class QueueArray{
+template<typename dataField>
+class Queue{
 public:
-	QueueArray()
+	Queue()
 		:queueArray(1){
 			currentSize=0;
 			front=0;
@@ -25,19 +28,19 @@ private:
 	void DoubleQueue();
 };
 
-template<class dataField>
-bool QueueArray<dataField>::isEmpty()const{
+template<typename dataField>
+bool Queue<dataField>::isEmpty()const{
 	return currentSize == 0;
 }
 
-template<class dataField>
-void QueueArray<dataField>::makeEmpty(){
+template<typename dataField>
+void Queue<dataField>::makeEmpty(){
 	currentSize=0;
 	front=0;
 	back=queueArray.size()-1;
 }
-template<class dataField>
-const dataField& QueueArray<dataField>::GetFront()const{
+template<typename dataField>
+const dataField& Queue<dataField>::GetFront()const{
 	if (!isEmpty())
 	{
 		return queueArray[front];
@@ -45,8 +48,8 @@ const dataField& QueueArray<dataField>::GetFront()const{
 		cout << "Empty!";
 	
 }
-template<class dataField>
-void QueueArray<dataField>::Enqueue(const dataField & x){
+template<typename dataField>
+void Queue<dataField>::Enqueue(const dataField & x){
 	if (currentSize == queueArray.size())
 	{
 		DoubleQueue();
@@ -56,8 +59,8 @@ void QueueArray<dataField>::Enqueue(const dataField & x){
 	currentSize++;
 }
 
-template<class dataField>
-void QueueArray<dataField>::DoubleQueue(){
+template<typename dataField>
+void Queue<dataField>::DoubleQueue(){
 	queueArray.resize(2*queueArray.size()+1);
 	if (front!=0)
 	{
@@ -70,8 +73,8 @@ void QueueArray<dataField>::DoubleQueue(){
 	
 }
 
-template<class dataField>
-dataField QueueArray<dataField>::Dequeue(){
+template<typename dataField>
+dataField Queue<dataField>::Dequeue(){
 	if (!isEmpty())
 	{
 		dataField frontItem = queueArray[front];

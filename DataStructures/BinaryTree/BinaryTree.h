@@ -2,7 +2,7 @@
 #define BinaryTree_h
 #include "BinaryNode.h"
 
-template <class Object>
+template <typename Object>
 class BinaryTree
 {
 public:
@@ -53,7 +53,7 @@ private:
 	void MakeEmpty(Node * &t);
 };
 
-template<class Object>
+template<typename Object>
 const BinaryTree<Object>& BinaryTree<Object>::operator=( const BinaryTree<Object> & rhs){
 	if (this != &rhs)
 	{
@@ -66,7 +66,7 @@ const BinaryTree<Object>& BinaryTree<Object>::operator=( const BinaryTree<Object
 	return *this;
 }
 
-template<class Object>
+template<typename Object>
 void BinaryTree<Object>::MakeEmpty(BinaryNode<Object>* &t){
 	if (t != NULL)
 	{
@@ -76,7 +76,7 @@ void BinaryTree<Object>::MakeEmpty(BinaryNode<Object>* &t){
 		t = NULL;
 	}
 }
-template<class Object>
+template<typename Object>
 void BinaryTree<Object>::Merge(const Object& rootItem, BinaryTree &t1, BinaryTree &t2){
 	if (t1.root == t2.root && t1.root != NULL)
 	{

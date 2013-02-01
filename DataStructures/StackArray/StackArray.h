@@ -3,7 +3,7 @@
 #include <vector>
 using namespace std;
 
-template<class dataField>
+template< typename dataField>
 class Stack{
 public:
 	Stack();
@@ -18,21 +18,21 @@ private:
 	int topOfStack;
 };
 
-template<class dataField>
+template<typename dataField>
 Stack<dataField>::Stack()
-	:theArray(1){
-		topOfStack = -1;
+	:theArray(1),topOfStack(-1){
+		
 }
 
-template<class dataField>
+template<typename dataField>
 bool Stack<dataField>::isEmpty(){
 	return topOfStack == -1;
 }
-template<class dataField>
+template<typename dataField>
 void Stack<dataField>::MakeEmpty(){
 	topOfStack = -1;
 }
-template<class dataField>
+template<typename dataField>
 const dataField &Stack<dataField>::Top() const{
 	if (!isEmpty())
 		return theArray[topOfStack];
@@ -41,7 +41,7 @@ const dataField &Stack<dataField>::Top() const{
 		return NULL;
 }
 
-template<class dataField>
+template<typename dataField>
 void Stack<dataField>::Push(const dataField &x){
 	if (topOfStack == theArray.size()-1)
 	{
@@ -50,14 +50,14 @@ void Stack<dataField>::Push(const dataField &x){
 	theArray[++topOfStack] = x;
 }
 
-template<class dataField>
+template<typename dataField>
 void Stack<dataField>::Pop(){
 	if (!isEmpty())
 		topOfStack--;
 	else
 		cout<< "stack is empty!";
 }
-template<class dataField>
+template<typename dataField>
 dataField Stack<dataField>:: TopAndPop(){
 	if (!isEmpty())
 	{

@@ -10,7 +10,8 @@
 #define LInkedList_LinkedList_h
 
 #include "listNode.h"
-template<class value_type>
+
+template<typename value_type>
 class linkedList
 {
 public:
@@ -34,23 +35,23 @@ private:
     listNode<value_type> *listIterator;
 };
 
-template<class value_type>
+template<typename value_type>
 linkedList<value_type>::linkedList()
 	:head(NULL),tail(NULL),listIterator(NULL){
 
 }
-template<class value_type>
+template<typename value_type>
 linkedList<value_type>::~linkedList(){
 
 }
-template<class value_type>
+template<typename value_type>
 bool linkedList<value_type>::isEmpty(){
 	if (head == NULL) {
 		return true;
 	}
 	return false;
 }
-template<class value_type>
+template<typename value_type>
 size_t linkedList<value_type>::listSize(){
 	listIterator = head;
 	if (!isEmpty()) {
@@ -63,7 +64,7 @@ size_t linkedList<value_type>::listSize(){
 	}
 	return 0; 
 }
-template<class value_type>
+template<typename value_type>
 bool linkedList<value_type>::addToHead(const value_type& data){
 	if (isEmpty()) {
 		head = new listNode<value_type>(data, head);
@@ -73,7 +74,7 @@ bool linkedList<value_type>::addToHead(const value_type& data){
 	}
 	return true;
 }
-template<class value_type>
+template<typename value_type>
 bool linkedList<value_type>::addToTail(const value_type& data){
 	//listIterator = head;
 	listNode<value_type>* newNode = new listNode<value_type>(data, NULL);
@@ -89,7 +90,8 @@ bool linkedList<value_type>::addToTail(const value_type& data){
 	}
 	return false;
 }
-template<class value_type>
+
+template<typename value_type>
 bool linkedList<value_type>::insertNode(int nodeNum, const value_type& data){
 
 	listNode<value_type>* temp;
@@ -107,7 +109,8 @@ bool linkedList<value_type>::insertNode(int nodeNum, const value_type& data){
 	newNode->setLink(temp);
 	return true;
 }
-template<class value_type>
+
+template<typename value_type>
 bool linkedList<value_type>::removeFromHead(){
 	listNode<value_type>* temp = head;
 	if (isEmpty())
@@ -125,7 +128,8 @@ bool linkedList<value_type>::removeFromHead(){
 	}
 	return true;
 }
-template<class value_type>
+
+template<typename value_type>
 bool linkedList<value_type>::removeFromTail(){
 
 	if (isEmpty()){
@@ -147,7 +151,8 @@ bool linkedList<value_type>::removeFromTail(){
 	}
 	return true;
 }
-template<class value_type>
+
+template<typename value_type>
 bool linkedList<value_type>::removeNode(int nodeNum){
 	if (isEmpty()){
 		std::cout << "List is empty";
@@ -166,7 +171,8 @@ bool linkedList<value_type>::removeNode(int nodeNum){
 		//std::cout << "remove node4";
 		return true;
 	}else{
-		listNode<value_type>* temp =NULL;
+        
+		listNode<value_type> *temp =NULL;
 		listIterator = head;
 		int previous = nodeNum-1;
 		while (--previous){
@@ -179,7 +185,7 @@ bool linkedList<value_type>::removeNode(int nodeNum){
 		return true;
 	}	
 }
-template<class value_type>
+template<typename value_type>
 bool linkedList<value_type>::updateNode(int nodeNum, const value_type& data ){
 	if (isNodeNumInvalid(nodeNum))
 	{
@@ -194,7 +200,7 @@ bool linkedList<value_type>::updateNode(int nodeNum, const value_type& data ){
 		return true;
 	}
 }
-template<class value_type>
+template<typename value_type>
 bool linkedList<value_type>::isNodeNumInvalid(int nodeNum){
 	if (nodeNum <= 0 || nodeNum > int (listSize()))
 	{
@@ -203,7 +209,7 @@ bool linkedList<value_type>::isNodeNumInvalid(int nodeNum){
 		return false;
 	}
 }
-template<class value_type>
+template<typename value_type>
 bool linkedList<value_type>::displayList()
 {
 	listIterator = head;

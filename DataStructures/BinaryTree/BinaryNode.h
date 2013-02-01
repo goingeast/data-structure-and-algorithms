@@ -3,7 +3,7 @@
 #include <iostream>
 using namespace std;
 
-template<class Object>
+template<typename Object>
 class BinaryNode{
 public:
 	BinaryNode(const Object& data = Object(), BinaryNode *lt = NULL, BinaryNode *rt = NULL);
@@ -18,13 +18,13 @@ public:
 	BinaryNode * right;
 };
 
-template <class Object>
+template <typename Object>
 BinaryNode< Object>::BinaryNode(const Object& data1, BinaryNode* lt, BinaryNode* rt){
 	data = data1;
 	right = rt;
 	left = lt;
 }
-template <class Object>
+template <typename Object>
 int BinaryNode<Object>::Size(BinaryNode *t){
 	if (t == NULL)
 		return 0;
@@ -32,14 +32,14 @@ int BinaryNode<Object>::Size(BinaryNode *t){
 		return 1+Size(t->left)+Size(t->right);
 }
 
-template <class Object>
+template <typename Object>
 int BinaryNode<Object>::Height(BinaryNode *t){
 	if (t == NULL)
 		return -1;
 	else
 		return 1 + max(Height(t->left),Height(t->right));
 }
-template<class Object>
+template<typename Object>
 BinaryNode<Object>* BinaryNode<Object>::Duplicate() const{
 	BinaryNode<Object>* root = new BinaryNode<Object>(data);
 	if (left != NULL)
@@ -52,7 +52,7 @@ BinaryNode<Object>* BinaryNode<Object>::Duplicate() const{
 	}
 	return root;
 }
-template<class Object>
+template<typename Object>
 void BinaryNode< Object >::PrintInOrder()const
 {
 	if (left != NULL)
@@ -66,7 +66,7 @@ void BinaryNode< Object >::PrintInOrder()const
 	}
 }
 
-template<class Object>
+template<typename Object>
 void BinaryNode< Object >::PrintPostOrder()const
 {
 	
@@ -81,7 +81,7 @@ void BinaryNode< Object >::PrintPostOrder()const
 	cout<< data << endl;
 }
 
-template<class Object>
+template<typename Object>
 void BinaryNode< Object >::PrintPreOrder()const {
 	cout<< data << endl;
 	if (left != NULL)
