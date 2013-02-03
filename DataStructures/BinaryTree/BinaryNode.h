@@ -7,8 +7,8 @@ template<typename Object>
 class BinaryNode{
 public:
 	BinaryNode(const Object& data = Object(), BinaryNode *lt = NULL, BinaryNode *rt = NULL);
-	static int Size(BinaryNode *t);
-	static int Height(BinaryNode *t);
+	static int Size(BinaryNode *t);  // the size of a node is the number of descendants the node has (including itself)
+	static int Height(BinaryNode *t); //the height of node is the length of the path from the node to the deepest leaf
 	void PrintPostOrder() const;
 	void PrintInOrder() const;
 	void PrintPreOrder() const;
@@ -39,6 +39,7 @@ int BinaryNode<Object>::Height(BinaryNode *t){
 	else
 		return 1 + max(Height(t->left),Height(t->right));
 }
+
 template<typename Object>
 BinaryNode<Object>* BinaryNode<Object>::Duplicate() const{
 	BinaryNode<Object>* root = new BinaryNode<Object>(data);
@@ -52,6 +53,7 @@ BinaryNode<Object>* BinaryNode<Object>::Duplicate() const{
 	}
 	return root;
 }
+
 template<typename Object>
 void BinaryNode< Object >::PrintInOrder()const
 {

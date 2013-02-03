@@ -1,6 +1,7 @@
 #ifndef BinaryTree_h
 #define BinaryTree_h
 #include "BinaryNode.h"
+// binary tree is a tree in which no node can have more than two children
 
 template <typename Object>
 class BinaryTree

@@ -11,7 +11,7 @@
 #include <vector>
 #include <cctype>
 #include <algorithm>
-#include "binaryStringAdd.h"
+#include "ReverseInt.h"
 using namespace std;
 
 /*
@@ -77,7 +77,8 @@ int main(int argc, char** argv) {
 	
     //cout << board[2][3];
     Solution test;
-    cout << test.addBinary("11", "11");
+    cout << test.reverse(147483641)<<endl;
+   cout << test.reverse(147483641);
    
     
     return 0;
