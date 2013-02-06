@@ -16,16 +16,16 @@ class BinarySearchTree{
             :root(NULL){
             
         }
-        BinarySearchTree(const BinarySearchTree & rhs)
+        BinarySearchTree(const BinarySearchTree & rhs) //copy constructor
             :root(NULL){
             *this = rhs;
         }
-        const BinarySearchTree & operator=(const BinarySearchTree & rhs);
+        const BinarySearchTree & operator=(const BinarySearchTree & rhs); 
         ~BinarySearchTree(){
             makeEmpty();
         };
-        
-        const Comparable& findMin() const{
+/////////////////////recursive version//////////////////////////////////////        
+        const Comparable& findMin() const{ // find the minimum element in the tree
             if(isEmpty()){
                 return NULL;
             }else{
@@ -33,35 +33,35 @@ class BinarySearchTree{
             }
         };
         
-        const Comparable& findMax() const{
+        const Comparable& findMax() const{ // find the maxmum element in the tree
             if(isEmpty()){
                 return NULL;
             }else{
                 return _findMax(root)->element;
             }
         };
-        bool contains(const Comparable& x) const{
+        bool contains(const Comparable& x) const{ // does the tree contains element x or not
             return _contains(root, x);
         };
-        bool isEmpty() const{
+        bool isEmpty() const{ // helper function
             return root == NULL;
         };
-        void makeEmpty(){
+        void makeEmpty(){  // make the tree empty
             _makeEmpty(root);
         };
-        void insert(const Comparable& x){
+        void insert(const Comparable& x){ // insert x
             _insert(x, root);
         };
         
-        void remove(const Comparable& x){
+        void remove(const Comparable& x){ // remove
             _remove(root, x);
         };
-        void removeMin(){
+        void removeMin(){   // remove the minimum element in the tree
             _removeMin(root);
         };
         
     private:
-        struct BinarySearchNode{
+        struct BinarySearchNode{  // node structure
             Comparable element;
             BinarySearchNode* left;
             BinarySearchNode* right;
@@ -70,17 +70,17 @@ class BinarySearchTree{
             }
         };
        
-        BinarySearchNode* root;
-        void _insert(const Comparable& x, BinarySearchNode* & temp){
+        BinarySearchNode* root; // root
+        void _insert(const Comparable& x, BinarySearchNode* & temp){ // insert helper
              if(temp == NULL){
                  temp = new BinarySearchNode(x);
-             }else if(temp->element <= x){
+             }else if(temp->element <= x){ // equal put right subtree
                  _insert(x, temp->right);
              }else if(temp->element > x){
                  _insert(x, temp->left);
              }
         };
-        BinarySearchNode* _findMin(BinarySearchNode* t) const{
+        BinarySearchNode* _findMin(BinarySearchNode* t) const{ // findMin helper
             if(t == NULL){
                 return NULL;
             }else if(t->left == NULL){
@@ -88,7 +88,7 @@ class BinarySearchTree{
             }
             _findMin(t);
         };
-        BinarySearchNode* _findMax(BinarySearchNode* t) const{
+        BinarySearchNode* _findMax(BinarySearchNode* t) const{ // findMax helper
             if(t == NULL){
                 return NULL;
             }else if(t->right == NULL){
@@ -96,20 +96,20 @@ class BinarySearchTree{
             }
             _findMax(t);
         }
-        void _remove(BinarySearchNode* &t, const Comparable& x){
+        void _remove(BinarySearchNode* &t, const Comparable& x){ // remove helper
             if(t == NULL){
                 return NULL;
             }else if(t->element > x){
                 _remove(t->left, x);
             }else if(t->element <= x){
                 _remove(t->right, x);
-            }else if(t->element == x){
-                if(t->left != NULL && t->right !=NULL){
-                    t->element = _findMin(t->right)->element;
-                    _remove(t->element, t->right);
+            }else if(t->element == x){ // find it
+                if(t->left != NULL && t->right !=NULL){       // if there are two children 
+                    t->element = _findMin(t->right)->element; // find the smallest element in the right subtree
+                    _remove(t->element, t->right);            // replace the old one.
                 }else{
-                    BinarySearchNode* oldNode = t;
-                    t = ( t->left != NULL ) ? t->left : t->right;
+                    BinarySearchNode* oldNode = t;                // if there are one child
+                    t = ( t->left != NULL ) ? t->left : t->right; // just replace the node with its child
                     delete oldNode;
                 }
             }
