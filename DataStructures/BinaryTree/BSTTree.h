@@ -40,7 +40,9 @@ class BinarySearchTree{
                 return _findMax(root)->element;
             }
         };
-        bool contains(const Comparable& x) const;
+        bool contains(const Comparable& x) const{
+            return _contains(root, x);
+        };
         bool isEmpty() const{
             return root == NULL;
         };
@@ -51,22 +53,34 @@ class BinarySearchTree{
             _insert(x, root);
         };
         
-        void remove(const Comparable& x);
-        void removeMin();
+        void remove(const Comparable& x){
+            _remove(root, x);
+        };
+        void removeMin(){
+            _removeMin(root);
+        };
         
     private:
-       struct BinarySearchNode{
-           Comparable element;
-           BinarySearchNode* left;
-           BinarySearchNode* right;
-           BinarySearchNode(const Comparable& theElement, BinarySearchNode* L = NULL, BinarySearchNode* R= NULL )
-                :element(theElement), left(L), right(R){
-           }
-       };
+        struct BinarySearchNode{
+            Comparable element;
+            BinarySearchNode* left;
+            BinarySearchNode* right;
+            BinarySearchNode(const Comparable& theElement, BinarySearchNode* L = NULL, BinarySearchNode* R= NULL )
+                 :element(theElement), left(L), right(R){
+            }
+        };
        
-       BinarySearchNode* root;
-       void _insert(const Comparable& x, BinarySearchNode* & t);
-       BinarySearchNode* _findMin(BinarySearchNode* t) const{
+        BinarySearchNode* root;
+        void _insert(const Comparable& x, BinarySearchNode* & temp){
+             if(temp == NULL){
+                 temp = new BinarySearchNode(x);
+             }else if(temp->element <= x){
+                 _insert(x, temp->right);
+             }else if(temp->element > x){
+                 _insert(x, temp->left);
+             }
+        };
+        BinarySearchNode* _findMin(BinarySearchNode* t) const{
             if(t == NULL){
                 return NULL;
             }else if(t->left == NULL){
@@ -74,48 +88,52 @@ class BinarySearchTree{
             }
             _findMin(t);
         };
-       BinarySearchNode* _findMax(BinarySearchNode* t) const;
-       void _makeEmpty(BinarySearchNode* & t);
+        BinarySearchNode* _findMax(BinarySearchNode* t) const{
+            if(t == NULL){
+                return NULL;
+            }else if(t->right == NULL){
+                return t;
+            }
+            _findMax(t);
+        }
+        void _remove(BinarySearchNode* &t, Comparable& x){
+            if(t == NULL){
+                return NULL;
+            }else if()
+        }
+        void _removeMin(BinarySearchNode* &t){
+            if(t== NULL){
+                return NULL;
+            }else if(t->left != NULL){
+                _removeMin(t->left);
+            }else{
+                BinarySearchNode* tmp = t;
+                t = t->right;
+                delete tmp;
+            }
+            
+        }
+        
+        void _makeEmpty(BinarySearchNode* & t){
+            if(t != NULL){
+                _makeEmpty(t->left);
+                _makeEmpty(t->right);
+                delete t;
+            }
+            t = NULL;
+        }
+        bool _contains(BinarySearchNode* &t, Comparable& x){
+            if(t == NULL){
+                return false;
+            }else if(t->element < x){
+                _contains(t->right, x);
+            }else if(t->element > x){
+                _contains(t->left, x);
+            }else if(t->element == x){
+                return true;
+            }
+            
+        }
 };
-
-
-template<typename Comparable>
-void BinarySearchTree<Comparable>::_insert(const Comparable& x, BinarySearchNode* & temp){
-    if(temp == NULL){
-        temp = new BinarySearchNode(x);
-    }else if(temp->element <= x){
-        _insert(x, temp->right);
-    }else if(temp->element > x){
-        _insert(x, temp->left);
-    }
-}
-template<typename Comparable>
-void BinarySearchTree<Comparable>::_makeEmpty(BinarySearchNode* & t){
-    if(t != NULL){
-        _makeEmpty(t->left);
-        _makeEmpty(t->right);
-        delete t;
-    }
-    t = NULL;
-}
-//template<typename Comparable>
-//BinarySearchNode* BinarySearchTree<Comparable>::_findMin(BinarySearchNode* t) const{
-//    if(t == NULL){
-//        return NULL;
-//    }else if(t->left == NULL){
-//        return t;
-//    }
-//    _findMin(t);
-//}
-
-template<typename Comparable>
-BinarySearchNode* BinarySearchTree<Comparable>::_findMax(BinarySearchNode* t) const{
-    if(t == NULL){
-        return NULL;
-    }else if(t->right == NULL){
-        return t;
-    }
-    _findMax(t);
-}
 #endif	/* BSTTREE_H */
 
