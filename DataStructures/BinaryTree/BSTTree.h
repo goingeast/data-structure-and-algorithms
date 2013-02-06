@@ -96,10 +96,23 @@ class BinarySearchTree{
             }
             _findMax(t);
         }
-        void _remove(BinarySearchNode* &t, Comparable& x){
+        void _remove(BinarySearchNode* &t, const Comparable& x){
             if(t == NULL){
                 return NULL;
-            }else if()
+            }else if(t->element > x){
+                _remove(t->left, x);
+            }else if(t->element <= x){
+                _remove(t->right, x);
+            }else if(t->element == x){
+                if(t->left != NULL && t->right !=NULL){
+                    t->element = _findMin(t->right)->element;
+                    _remove(t->element, t->right);
+                }else{
+                    BinarySearchNode* oldNode = t;
+                    t = ( t->left != NULL ) ? t->left : t->right;
+                    delete oldNode;
+                }
+            }
         }
         void _removeMin(BinarySearchNode* &t){
             if(t== NULL){
