@@ -5,6 +5,7 @@
                    displayName="Header Files"
                    projectFiles="true">
       <logicalFolder name="BinaryTree" displayName="BinaryTree" projectFiles="true">
+        <itemPath>BinaryTree/AVLTree.h</itemPath>
         <itemPath>BinaryTree/BSTTree.h</itemPath>
         <itemPath>BinaryTree/BinaryNode.h</itemPath>
         <itemPath>BinaryTree/BinaryTree.h</itemPath>
@@ -56,6 +57,8 @@
       </toolsSet>
       <compileType>
       </compileType>
+      <item path="BinaryTree/AVLTree.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="BinaryTree/BSTTree.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="BinaryTree/BinaryNode.h" ex="false" tool="3" flavor2="0">
@@ -98,6 +101,8 @@
           <developmentMode>5</developmentMode>
         </asmTool>
       </compileType>
+      <item path="BinaryTree/AVLTree.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="BinaryTree/BSTTree.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="BinaryTree/BinaryNode.h" ex="false" tool="3" flavor2="0">
