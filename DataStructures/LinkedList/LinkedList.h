@@ -9,7 +9,7 @@
 #ifndef LInkedList_LinkedList_h
 #define LInkedList_LinkedList_h
 
-#include "listNode.h"
+#include "ListNode.h"
 
 template<typename value_type>
 class linkedList
@@ -19,7 +19,7 @@ public:
 	linkedList(const linkedList&);
     ~linkedList();
     bool isEmpty();
-    size_t listSize();
+    int listSize();
     bool addToHead(const value_type& );
 	bool addToTail(const value_type& );
     bool removeFromHead();
@@ -52,10 +52,10 @@ bool linkedList<value_type>::isEmpty(){
 	return false;
 }
 template<typename value_type>
-size_t linkedList<value_type>::listSize(){
+int linkedList<value_type>::listSize(){
 	listIterator = head;
 	if (!isEmpty()) {
-		size_t temp = 1;
+		int temp = 1;
 		while (listIterator != tail) {
 			listIterator = listIterator->getLink();
 			temp++;
@@ -202,7 +202,7 @@ bool linkedList<value_type>::updateNode(int nodeNum, const value_type& data ){
 }
 template<typename value_type>
 bool linkedList<value_type>::isNodeNumInvalid(int nodeNum){
-	if (nodeNum <= 0 || nodeNum > int (listSize()))
+	if (nodeNum <= 0 || nodeNum > listSize())
 	{
 		return true;
 	}else{

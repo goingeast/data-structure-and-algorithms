@@ -3,7 +3,7 @@ CFLAGS=-c -Wall
 LDFLAGS=
 SOURCES=Test.cpp
 OBJECTS=$(SOURCES:.cpp=.o)
-EXECUTABLE=hello
+EXECUTABLE=linkedlist
 
 all: $(SOURCES) $(EXECUTABLE)
 	
@@ -12,3 +12,7 @@ $(EXECUTABLE): $(OBJECTS)
 
 .cpp.o:
 	$(CC) $(CFLAGS) $< -o $@
+
+.PHONY: clean
+clean:
+	-rm $(objects)
