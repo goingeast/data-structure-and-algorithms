@@ -4,3 +4,5 @@
 /Problems/dist/
 /DataStructures/build/
 /DataStructures/dist/
+
+*.DS_store
