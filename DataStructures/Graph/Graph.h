@@ -9,6 +9,7 @@
 #define	GRAPH_H
 #include<iostream>
 #include<vector>
+#include <queue>
 using namespace std;
 
 class EdgeNode{
@@ -34,21 +35,23 @@ public:
     void Insert(int x,int y, bool directed= false, int weight = NULL);
     void BuildGraph();
     void PrintGraph();
+    void BFS(int start);
+    void DFS();
     
 };
 
 void Graph::Insert(int x, int y, bool directed, int weight){
-    while(edges.size() < x){
+    while(edges.size() < x + 1){
         edges.push_back(NULL); // due to vector
         degree.push_back(0);
     }
-    x = x-1; // index
+    
     EdgeNode* newEdge = new EdgeNode(y, weight, edges[x]);
     
     edges[x] = newEdge;
     degree[x]++;
     if(directed == false)
-        Insert(y, x+1, true);
+        Insert(y, x, true);
     else
         _nedges++;
 }
@@ -69,14 +72,46 @@ void Graph::BuildGraph(){
 
 void Graph::PrintGraph(){
     EdgeNode* p;
-    for(int i=0; i < edges.size(); ++i){
-        cout << "\n"<< i+1 << ":";
+    for(int i=1; i < edges.size(); ++i){
+        cout << "\n"<< i << ":";
         p = edges[i];
         while(p != NULL){
             cout << p->_y;
             p = p->_next;
         }
     }
+}
+void Graph::BFS( int start){
+    vector<bool> discovered;
+    vector<bool> processed;
+    vector<int> parent;
+    for(int i=0; i < edges.size(); ++i){
+        discovered.push_back(false);
+        processed.push_back(false);
+        parent.push_back(-1);
+    }
+    queue<int> q;
+    q.push(start);
+    discovered[start] = true;
+    while(!q.empty()){
+        int v = q.front();
+        q.pop();
+        processed[v] = true;
+        EdgeNode * en = edges[v];
+        while(en!=NULL){
+            int y=en->_y;
+            if(processed[y] == false || _directed){
+                cout << "processed X:"<< v <<"Y:"<< y << endl;
+            }
+            if(discovered[y] == false){
+                discovered[y] = true;
+                q.push(y);
+                parent[y] = y;
+            }
+            en= en->_next;
+        }
+    }
+   
 }
 #endif	/* GRAPH_H */
 
