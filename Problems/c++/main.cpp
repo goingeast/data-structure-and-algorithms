@@ -258,26 +258,128 @@ Node* _addLists(Node* l1, Node* l2, int carry){
     if(l1 == NULL && l2 != NULL)
         digitSum = l2->value + carry;
     if(l1 != NULL && l2 == NULL)
-        digitSum = l2->value + carry;
+        digitSum = l1->value + carry;
     if(l1 != NULL && l2 != NULL)
         digitSum = l1->value + l2->value + carry;
     int curCarry = digitSum / 10;
     int digit = digitSum % 10;
-    Node * digitNode = _addLists(l1 == NULL? NULL: l1->next, l2 == NULL? NULL: l2->next, curCarry);
+    Node * digitNode = _addLists(l1 == NULL? NULL: l1->next,
+								 l2 == NULL? NULL: l2->next,
+								 curCarry);
     Node * r = new Node(digit, digitNode);
     return r;
 }
+//2.6 decide is there a loop
+Node* isLoop(Node* startNode){
+	Node* slowNode = startNode;
+	Node* fastNode = startNode;
+	// check wheather is a loop
+	while((slowNode != NULL) && (fastNode->next != NULL)){
+		slowNode = slowNode->next;
+		fastNode = fastNode->next->next;
+		if(slowNode == fastNode)
+			break;
+	}
+	
+	if(fastNode == NULL || fastNode->next == NULL){
+		return NULL;
+	}
+	// get start node of the loop
+	slowNode = startNode;
+	while(slowNode != fastNode){
+		slowNode = slowNode->next;
+		fastNode = fastNode->next;
+	}
+	 return fastNode;
+	
+}
 
+//chapter 2.7 check palidrome
+// chapter 3.1 inplement three stack in a array
+//|----------------------------------------------|
+//|->               shift|                     <-|
+//|----------------------------------------------|
+class threeStack{
+	#define MAXSIZE 30
+public:
+	threeStack()
+		:stack1Top(-1),stack2Top(MAXSIZE),stack3Top(MAXSIZE/3 - 1),stack3Bot(MAXSIZE/3){
+			for(size_t i = 0; i < MAXSIZE; ++i){
+				_status[i] = false;
+			}
+	};
+	pop1(){
+	
+	};
+	pop2();
+	pop3();
+	void push1(int value){
+		if(_status[++stack1Top] == false){
+			_container[stack1Top] = value;
+			_status[stack1Top] == true;
+		}else{
+			int pos = stack3Top - stack2Top;
+			if(pos > 1){
+				stack3Shift(pos/2, true); //true for right shift
+				_container[stack1Top] = value;
+				_status[stack1Top] == true;
+			}else{
+				cout << "it's full!";
+			}
+		}
+	};
+	void push2(int value){
+		if(_status[--stack2Top] == false){
+			_container[stack2Top] = value;
+			_status[stack2Top] = true;
+		}else{
+			int pos = stack3Bot - stack1Top;
+			if(pos > 1){
+				stack3Shift(pos/2, false); //false for left shift
+				_container[stack2Top] = value;
+				_status[stack2Top] == true;
+			}else{
+				cout << "it's full!";
+			}
+		}
+	};
+	void push3(int value){
+		if(_status[++stack3Top] == false){
+			_container[stack3Top] = value;
+			_status[stack3Top] = true;
+		}else{
+			int pos = stack3Bot - stack1Top;
+			if(pos > 1){
+				stack3Shift(pos/2, false); //false for left shift
+				_container[stack2Top] = value;
+				_status[stack2Top] == true;
+			}else{
+				cout << "it's full!";
+			}
+		}
+	};
+private:
+	void stack3Shift(int pos, bool direction);
+	int stack1Top;
+	int stack2Top;
+	int stack3Top;
+	int stack3Bot;
+	int _container[MAXSIZE];
+	bool _status[MAXSIZE];
+
+}
 int main(int argc, char** argv) {
 
     Node * a = new Node(8);
-    Node * b = new Node(1, a);
+    Node * b = new Node(1);
     Node * c = new Node(3, b);
-    Node * d = new Node(0);
+    Node * d = new Node(0, c);
     Node * e = new Node(5, d);
+	b->next = e;
     Node * f = new Node(3, e);
     
-    Node* r = _addLists(b, d,0);
+    //Node* r = _addLists(b, d,0);
+	Node* r = isLoop(f);
     //DeleteDupalicate(m);
     //cout << findLastKth(m, 7);
     return 0;
