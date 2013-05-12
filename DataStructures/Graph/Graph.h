@@ -10,6 +10,7 @@
 #include<iostream>
 #include<vector>
 #include <queue>
+#include <stack>
 using namespace std;
 
 class EdgeNode{
@@ -36,7 +37,9 @@ public:
     void BuildGraph();
     void PrintGraph();
     void BFS(int start);
-    void DFS();
+    void DFS(int start);
+    void _DFS(vector<bool> & discovered, vector<bool>& processed, vector<int> & parent,
+                    vector<int> & entry_time,vector<int> & exit_entry, int start);
     
 };
 
@@ -112,6 +115,49 @@ void Graph::BFS( int start){
         }
     }
    
+}
+
+void Graph::DFS(int start){
+    vector<bool> discovered;
+    vector<bool> processed;
+    vector<int> parent;
+    vector<int> entry_time;
+    vector<int> exit_time;
+    for(int i=0; i < edges.size(); ++i){
+        discovered.push_back(false);
+        processed.push_back(false);
+        parent.push_back(-1);
+        entry_time.push_back(0);
+        exit_time.push_back(0);
+    }
+    _DFS(discovered,  processed, parent, entry_time, exit_time, start);
+}
+
+void Graph::_DFS(vector<bool>& discovered, vector<bool>& processed, 
+        vector<int>& parent, vector<int>entry_time, vector<int> exit_time, int v){
+    
+    discovered[v] = true;
+    static int time = 0;
+    //if(finished) return;
+    //process vertex u if desired
+    entry_time[v] = ++time;
+    EdgeNode* p = edges[v];
+    while(p != NULL){
+        int y = p->_y;
+        if(discovered[y] == false){
+            discovered[y] = true;
+            //process edge
+            parent[y] = v;
+            _DFS(discovered, processed, parent, entry_time, exit_time, y);
+        }else if(processed[v] == false || _directed ){
+            //process edge
+        }
+        //if(finished) return;
+        p = p->_next;
+    }
+    exit_time[v] = ++time;
+    processed[v] = true; 
+
 }
 #endif	/* GRAPH_H */
 

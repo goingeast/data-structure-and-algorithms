@@ -11,4 +11,15 @@
 
 *.DS_Store
 >>>>>>> 3791ada456fb509f327075623ddd31dd778a64f4
+<<<<<<< HEAD
 /Problems/helloworld/nbproject/private/
+=======
+/DataStructures/Graph/build/
+/DataStructures/Graph/dist/
+/DataStructures/Backtracking/dist/
+/DataStructures/Backtracking/build/
+/DataStructures/JavaApplication2/nbproject/private/
+/DataStructures/JavaApplication2/build/
+/DataStructures/postStack/build/
+/DataStructures/postStack/dist/
+>>>>>>> ef45270dec2722fec4c1668cd50a0b4051bd32a9
