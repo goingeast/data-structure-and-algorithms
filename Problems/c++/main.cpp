@@ -297,13 +297,13 @@ Node* isLoop(Node* startNode){
 //chapter 2.7 check palidrome
 // chapter 3.1 inplement three stack in a array
 //|----------------------------------------------|
-//|->               42|13                      <-|
+//|->               shift|                     <-|
 //|----------------------------------------------|
 class threeStack{
 	#define MAXSIZE 30
 public:
 	threeStack()
-		:stack1Top(0),stack2Top(MAXSIZE),stack3Top(MAXSIZE/2){
+		:stack1Top(-1),stack2Top(MAXSIZE),stack3Top(MAXSIZE/3 - 1),stack3Bot(MAXSIZE/3){
 			for(size_t i = 0; i < MAXSIZE; ++i){
 				_status[i] = false;
 			}
@@ -314,30 +314,56 @@ public:
 	pop2();
 	pop3();
 	void push1(int value){
-		if(_status[stack1Top] == false){
+		if(_status[++stack1Top] == false){
 			_container[stack1Top] = value;
-			_status[stack1Top++] == true;
+			_status[stack1Top] == true;
+		}else{
+			int pos = stack3Top - stack2Top;
+			if(pos > 1){
+				stack3Shift(pos/2, true); //true for right shift
+				_container[stack1Top] = value;
+				_status[stack1Top] == true;
+			}else{
+				cout << "it's full!";
+			}
 		}
 	};
 	void push2(int value){
-		if(_status[stack2Top] == false){
+		if(_status[--stack2Top] == false){
 			_container[stack2Top] = value;
-			_status[stack2Top--] = true;
+			_status[stack2Top] = true;
+		}else{
+			int pos = stack3Bot - stack1Top;
+			if(pos > 1){
+				stack3Shift(pos/2, false); //false for left shift
+				_container[stack2Top] = value;
+				_status[stack2Top] == true;
+			}else{
+				cout << "it's full!";
+			}
 		}
 	};
 	void push3(int value){
-		if(stack3Top == MAXSIZE/2)
-			if(_status[stack3Top] == false){
-				_container[stack3Top] = value;
-				_status[stack3Top++]
+		if(_status[++stack3Top] == false){
+			_container[stack3Top] = value;
+			_status[stack3Top] = true;
+		}else{
+			int pos = stack3Bot - stack1Top;
+			if(pos > 1){
+				stack3Shift(pos/2, false); //false for left shift
+				_container[stack2Top] = value;
+				_status[stack2Top] == true;
+			}else{
+				cout << "it's full!";
 			}
-			
+		}
 	};
 private:
-
+	void stack3Shift(int pos, bool direction);
 	int stack1Top;
 	int stack2Top;
 	int stack3Top;
+	int stack3Bot;
 	int _container[MAXSIZE];
 	bool _status[MAXSIZE];
 
