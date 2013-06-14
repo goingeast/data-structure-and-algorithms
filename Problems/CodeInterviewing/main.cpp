@@ -11,7 +11,7 @@
 #include<vector>
 #include<tr1/unordered_map>
 #include<algorithm>
-
+#include<cstring>
 using namespace std;
 using namespace tr1;
 
@@ -562,7 +562,44 @@ void FindCombination(int r[], int k, int a[], int size,int n){
         }
     }
 }
-///////////////
+
+/////////////////////////////////////////
+// A divide and conquer solution to find a peak element element
+//#include <stdio.h>
+ 
+// A binary search based function that returns index of a peak element
+int findPeakUtil(int arr[], int low, int high, int n)
+{
+    // Fin index of middle element
+    int mid = low + (high - low)/2;  /* (low + high)/2 */
+ 
+    // Compare middle element with its neighbours (if neighbours exist)
+    if ((mid == 0 || arr[mid-1] <= arr[mid]) &&
+            (mid == n-1 || arr[mid+1] <= arr[mid]))
+        return mid;
+ 
+    // If middle element is not peak and its left neighbor is greater than it
+    // then left half must have a peak element
+    else if (mid > 0 && arr[mid-1] > arr[mid])
+        return findPeakUtil(arr, low, (mid -1), n);
+ 
+    // If middle element is not peak and its right neighbor is greater than it
+    // then right half must have a peak element
+    else return findPeakUtil(arr, (mid + 1), high, n);
+}
+ 
+// A wrapper over recursive function findPeakUtil()
+int findPeak(int arr[], int n)
+{
+    return findPeakUtil(arr, 0, n-1, n);
+}
+ 
+/////////////////////////////////////////
+//Wild Matching
+
+
+
+/////////////////////////////////////////
 bool checkPalindrome(unsigned int num){
     unsigned int temp = num;
     unsigned int reversed = 0;
@@ -576,51 +613,200 @@ bool checkPalindrome(unsigned int num){
         return true;
 }
 
-int main(int argc, char** argv) {
-    //cout << sizeof(A)<< " "<< endl;
-    //cout << find(3);
-    vector<int> a;
-    a.push_back(3);
-    a.push_back(2);
-    a.push_back(1);   
-    //threeSum(a);
-    //char b[] = "1,,2,3,3,3,3333,34,4,,,";
-//    string b = "1,,2,3,3,3,3333,34,4,,,";
-//    removeComma(b);
-//    cout << b;
-//    
-//    string s = "1,204,342,544";
-//    s.erase(remove(s.begin(), s.end(), ',' ), s.end());
-//    cout << s;
+bool checkPalindrome2(string str){
+    if(str.empty())
+        return false;
+    int front = 0;
+    int end = str.size() - 1;
+    while(front < end){
+        if(str[front] != str[end])
+            return false;
+        front++;
+        end--;
+    }
+    return true;
+}
+///////////////////////////////////////
+//reverse string with words, if we use string lib
+//
+void _reverse1(char* str){
+    if(!str)
+        return;
+    _reverse1(strtok(NULL, " "));
+    cout << str << ' ';
+}
+void reverseSentence1(char* str){
+    _reverse1(strtok(str, " "));
+}
+//-------------------------------------
+// without use cstring lib
+// step 1 "I like China"-> "I ekil anihC"
+// step 2 "China like I"
+void _reverse2(char* begin, char* end){
+    char temp;
+    while(begin < end){
+        temp = *begin;
+        *begin++ = *end;
+        *end-- = temp;
+    }
+}
+void reverseSentence2(char* str){
+    char* temp = str;
+    char* begin = NULL;
+    while(*temp ){
+        if(*temp != ' ' && begin == NULL){
+            begin = temp;
+        }
+        if(begin && (*(temp+1) == ' ' || *(temp+1) == '\0')){
+            _reverse2(begin, temp);
+            begin = NULL;
+        }
+        temp++;
+    }
+    _reverse2(str,temp-1);
+}
+
+/////////////////////
+int sqrt(int x){
+    double x1 = x, x2 = x -0.1;
+    while(fabs(x2 - x1) > 0.0001){
+        x1 = x2;
+        x2 = (x1 + x/x1)/2;
+    }
+    return (int) x2;
+}
+
+double sqrt1(double x){
+    double x1 = x, x2 = x -0.1;
+    while(fabs(x2 - x1) > 0.0001){
+        x1 = x2;
+        x2 = (x1 + x/x1)/2;
+    }
+    return x2;
+} 
+////////////////////////////////////////
+//strstr implementation
+char* strstr1(char* dest, char* tar){
+    if(*tar == '\0') 
+        return dest;
     
-    int c[] = {1,2,3,4,5,6,7};
-    int r[2] = {0,0};
-   // findKTimes(c, 15, 3);
-    //FindCombination(r,0,c,7,2);
-    cout << checkPalindrome(1321);
-//    Node * a = new Node(8);
-//    Node * b = new Node(1, a);
-//    Node * c = new Node(3, b);
-//    Node * d = new Node(0, c);
-//    Node * e = new Node(5, d);
-//    Node * f = new Node(3, e);
-//    reverseLinkedlist(f);
+   char* dest_iter = dest;
+   while(*dest_iter != '\0'){
+       
+       char* begin = dest_iter;
+       char* tar_iter = tar;
+       
+       while(*dest_iter && *tar_iter && *dest_iter == * tar_iter){
+               tar_iter++;
+               dest_iter++;
+       }
+          
+       if(*tar_iter == '\0')
+           return begin;
+       dest_iter = begin + 1;
+   }
+   return NULL;
+}
+
+int strcmp1(char* str1, char* str2){
+    while(*str1 || *str2){
+        if(*str1 == *str2){
+            str1++;
+            str2++;
+        }else{
+            return (*str1 - *str2);
+        }
+    }
+    if(!*str1 && !*str2)
+        return 0;
+}
+int strcmp2(char* str1, char* str2){
+    int ret = 0;
+    while(!(ret = (*str1 - *str2)) && *str1 && *str2){
+        str1++;
+        str2++;
+    }
+    return ret;
+}
+
+void *memcpy(void* dst, void* src, size_t n){
+    void* ret = dst;
+    if(dst <= src|| (char*) dst >= ((char*) src + n ))
+        while(n--){
+            *(char*) dst = *(char*) src;
+            dst = (char*)dst + 1;
+            src = (char*)src + 1;
+        }
+    else{
+        dst = (char*) dst + n - 1;
+        src = (char*) src + n - 1;
+        while(n--){
+            *(char*) dst = *(char*) src;
+            dst = (char*)dst - 1;
+            src = (char*)src - 1;
+        }
+    }
+}
+////////////
+
+int main(int argc, char** argv) {
+    cout << sqrt1(3);
+    char a[] = "aaagee ee";
+    char b[] = "   geeee";
+    if(strcmp(b, a) == strcmp2(b,a))
+        //cout << strstr(a,b);
+        //cout << strstr1(a, b);
+        cout << "equal";
+//    //cout << sizeof(A)<< " "<< endl;
+//    //cout << find(3);
+//    vector<int> a;
+//    a.push_back(3);
+//    a.push_back(2);
+//    a.push_back(1);   
+//    //threeSum(a);
+//    //char b[] = "1,,2,3,3,3,3333,34,4,,,";
+////    string b = "1,,2,3,3,3,3333,34,4,,,";
+////    removeComma(b);
+////    cout << b;
+////    
+////    string s = "1,204,342,544";
+////    s.erase(remove(s.begin(), s.end(), ',' ), s.end());
+////    cout << s;
 //    
-//    threeStack t;
-//    t.push1(1);
-//    t.push2(2);
-//    t.push3(3);
-//    t.push1(4);
-//    t.push1(4);
-//    t.push1(4);
-//    t.push2(5);
-//    t.push2(5);
-//    t.push2(5);
-//    //t.push1(0);
-//    t.push2(7);
-    //Node* r = _addLists(b, d,0);
-	//Node* r = isLoop(f);
-    //DeleteDupalicate(m);
-    //cout << findLastKth(m, 7);
-    return 0;
+//    int c[] = {1,2,3,4,5,6,7};
+//    int num[] = {10,20,15,30,21};
+//    cout << findPeak(num, 5);
+//    int r[2] = {0,0};
+//   // findKTimes(c, 15, 3);
+//    //FindCombination(r,0,c,7,2);
+//    string str = "ababa";
+//    cout << checkPalindrome2(str);
+//    char st[] = "  I   like China ";
+//    reverseSentence2(st);
+//    cout << st;
+////    Node * a = new Node(8);
+////    Node * b = new Node(1, a);
+////    Node * c = new Node(3, b);
+////    Node * d = new Node(0, c);
+////    Node * e = new Node(5, d);
+////    Node * f = new Node(3, e);
+////    reverseLinkedlist(f);
+////    
+////    threeStack t;
+////    t.push1(1);
+////    t.push2(2);
+////    t.push3(3);
+////    t.push1(4);
+////    t.push1(4);
+////    t.push1(4);
+////    t.push2(5);
+////    t.push2(5);
+////    t.push2(5);
+////    //t.push1(0);
+////    t.push2(7);
+//    //Node* r = _addLists(b, d,0);
+//	//Node* r = isLoop(f);
+//    //DeleteDupalicate(m);
+//    //cout << findLastKth(m, 7);
+//    return 0;
 }
