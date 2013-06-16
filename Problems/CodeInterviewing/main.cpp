@@ -748,65 +748,75 @@ void *memcpy(void* dst, void* src, size_t n){
     }
 }
 ////////////
-
-int main(int argc, char** argv) {
-    cout << sqrt1(3);
-    char a[] = "aaagee ee";
-    char b[] = "   geeee";
-    if(strcmp(b, a) == strcmp2(b,a))
-        //cout << strstr(a,b);
-        //cout << strstr1(a, b);
-        cout << "equal";
-//    //cout << sizeof(A)<< " "<< endl;
-//    //cout << find(3);
-//    vector<int> a;
-//    a.push_back(3);
-//    a.push_back(2);
-//    a.push_back(1);   
-//    //threeSum(a);
-//    //char b[] = "1,,2,3,3,3,3333,34,4,,,";
-////    string b = "1,,2,3,3,3,3333,34,4,,,";
-////    removeComma(b);
-////    cout << b;
-////    
-////    string s = "1,204,342,544";
-////    s.erase(remove(s.begin(), s.end(), ',' ), s.end());
-////    cout << s;
-//    
-//    int c[] = {1,2,3,4,5,6,7};
-//    int num[] = {10,20,15,30,21};
-//    cout << findPeak(num, 5);
-//    int r[2] = {0,0};
-//   // findKTimes(c, 15, 3);
-//    //FindCombination(r,0,c,7,2);
-//    string str = "ababa";
-//    cout << checkPalindrome2(str);
-//    char st[] = "  I   like China ";
-//    reverseSentence2(st);
-//    cout << st;
-////    Node * a = new Node(8);
-////    Node * b = new Node(1, a);
-////    Node * c = new Node(3, b);
-////    Node * d = new Node(0, c);
-////    Node * e = new Node(5, d);
-////    Node * f = new Node(3, e);
-////    reverseLinkedlist(f);
-////    
-////    threeStack t;
-////    t.push1(1);
-////    t.push2(2);
-////    t.push3(3);
-////    t.push1(4);
-////    t.push1(4);
-////    t.push1(4);
-////    t.push2(5);
-////    t.push2(5);
-////    t.push2(5);
-////    //t.push1(0);
-////    t.push2(7);
-//    //Node* r = _addLists(b, d,0);
-//	//Node* r = isLoop(f);
-//    //DeleteDupalicate(m);
-//    //cout << findLastKth(m, 7);
-//    return 0;
+//expression
+////////////
+////////////
+//max profit
+// profit[] =  {55.39, 109.23, 48.29, 81.59, 105.53, 94.45, 12.24}
+int maxprofit(){
+    
 }
+
+///////////
+
+//int main(int argc, char** argv) {
+//    cout << sqrt1(3);
+//    char a[] = "aaagee ee";
+//    char b[] = "   geeee";
+//    if(strcmp(b, a) == strcmp2(b,a))
+//        //cout << strstr(a,b);
+//        //cout << strstr1(a, b);
+//        cout << "equal";
+////    //cout << sizeof(A)<< " "<< endl;
+////    //cout << find(3);
+////    vector<int> a;
+////    a.push_back(3);
+////    a.push_back(2);
+////    a.push_back(1);   
+////    //threeSum(a);
+////    //char b[] = "1,,2,3,3,3,3333,34,4,,,";
+//////    string b = "1,,2,3,3,3,3333,34,4,,,";
+//////    removeComma(b);
+//////    cout << b;
+//////    
+//////    string s = "1,204,342,544";
+//////    s.erase(remove(s.begin(), s.end(), ',' ), s.end());
+//////    cout << s;
+////    
+////    int c[] = {1,2,3,4,5,6,7};
+////    int num[] = {10,20,15,30,21};
+////    cout << findPeak(num, 5);
+////    int r[2] = {0,0};
+////   // findKTimes(c, 15, 3);
+////    //FindCombination(r,0,c,7,2);
+////    string str = "ababa";
+////    cout << checkPalindrome2(str);
+////    char st[] = "  I   like China ";
+////    reverseSentence2(st);
+////    cout << st;
+//////    Node * a = new Node(8);
+//////    Node * b = new Node(1, a);
+//////    Node * c = new Node(3, b);
+//////    Node * d = new Node(0, c);
+//////    Node * e = new Node(5, d);
+//////    Node * f = new Node(3, e);
+//////    reverseLinkedlist(f);
+//////    
+//////    threeStack t;
+//////    t.push1(1);
+//////    t.push2(2);
+//////    t.push3(3);
+//////    t.push1(4);
+//////    t.push1(4);
+//////    t.push1(4);
+//////    t.push2(5);
+//////    t.push2(5);
+//////    t.push2(5);
+//////    //t.push1(0);
+//////    t.push2(7);
+////    //Node* r = _addLists(b, d,0);
+////	//Node* r = isLoop(f);
+////    //DeleteDupalicate(m);
+////    //cout << findLastKth(m, 7);
+////    return 0;
+//}
