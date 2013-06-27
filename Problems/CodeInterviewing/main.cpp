@@ -753,13 +753,174 @@ void *memcpy(void* dst, void* src, size_t n){
 ////////////
 //max profit
 // profit[] =  {55.39, 109.23, 48.29, 81.59, 105.53, 94.45, 12.24}
-int maxprofit(){
+/////////////
+// how many 1 in a binary number
+int binaryNum(int num){
+    int count = 0;
+    while(num){
+        if(num%2 == 1){
+            count++;
+        }
+        num/=2;
+        //num+= num & 0x01;
+        //num>>= 1;
+     }
+    return count;
+}
+/////////////////////////
+// find more than half times number
+int find(int a[], int N){
+    int times = 0;
+    int candidate = 0;
+    for(int i = 0; i < N; ++i){
+        if(times == 0){
+            candidate = a[i];
+            times = 1;
+        }
+        if(a[i] == candidate)
+            times++;
+        else
+            times--;
+    }
+}
+//int maxprofit(){
+    
+//}
+
+///////////
+/////////
+void swap1(int & a, int & b){
+    a = a + b;
+    b = a - b;
+    a = a - b;
+}
+
+void swap2(int & a, int & b){
+    a = a ^ b;
+    b = a ^ b;
+    a = a ^ b;
+}
+
+void findMinMax(int a[], int size){
+    int min = std::numeric_limits<int>::max();
+    int max = std::numeric_limits<int>::min();
+    for(int i=0; i < size; ++i){
+        if(min > a[i]){
+            min = a[i];
+        }
+        if( max < a[i]){
+            max = a[i];
+        }
+    }
+    cout << min <<' '<< max;
+}
+
+int getValue(char R){
+    switch(R){
+        case 'I':
+            return 1;
+            break;
+        case 'V':
+            return 5;
+            break;
+        case 'X':
+            return 10;
+            break;
+        case 'L':
+            return 50;
+            break;
+        case 'C':
+            return 100;
+            break;
+        case 'D':
+            return 500;
+            break;
+        case 'M':
+            return 1000;
+            break;
+        default:
+            cout << "invalide number";
+            break;
+    }
     
 }
 
-///////////
+int RomanToInt(char * roman){
+    int ret =0;
+    if(*roman == '\0')
+        return ret;
+    char* temp1 = roman;
+    char* temp2;
+    while(*temp1 != '\0'){
+        temp2 = temp1+1;
+        if(*temp2 == '\0'){
+            ret+= getValue(*temp1);
+        }else if( getValue(*temp1) < getValue(*temp2)){
+            ret+= getValue(*temp2)- getValue(*temp1);
+            temp1++;
+        }else{
+            ret += getValue(*temp1);
+        } 
+        temp1++;
+    }
+    return ret;
+}
+// zeros in factorial
+int zeroNum(int N){
+    
+    int num = 0, temp;
+    while(N){
+        temp = N;
+        while(temp%5 == 0){
+            num++;
+            temp/=5;
+        }
+        N-=5;
+    }
+    return num;
+}
+int zeroNum2(int N){
+    int ret = 0;
+    while(N){
+        ret += N/5;
+        N/=5;
+    }
+    return ret;
+}
 
+void MergeTwoArray(int a[], int b[], int sizeA,int total,int sizeB){
+    int i = sizeA - 1;
+    int j = sizeB - 1;
+    while(j != -1 && i != -1){
+        int size = i + j + 1;
+        if(a[i] > b[j]){
+            a[size] = a[i];
+            i--;
+        }else{
+            a[size] = b[j];
+            j--;
+        }
+    }
+    while(j != -1){
+        a[j] = b[j];
+        j--;
+    }
+    for(int i=0; i < total; ++i){
+        cout << a[i] << endl;
+    }
+    
+}
 //int main(int argc, char** argv) {
+    //cout << binaryNum(65535);
+    //int a = 1;
+    //int b = 2;
+    //swap1(a, b);
+    //cout << a << b << endl;
+    //swap2(a, b);
+    //cout << a << b;
+    //cout << endl << zeroNum2(25
+     char a[]="MCMXC";
+     //cout << RomanToInt(a);
 //    cout << sqrt1(3);
 //    char a[] = "aaagee ee";
 //    char b[] = "   geeee";
@@ -783,8 +944,11 @@ int maxprofit(){
 //////    s.erase(remove(s.begin(), s.end(), ',' ), s.end());
 //////    cout << s;
 ////    
-////    int c[] = {1,2,3,4,5,6,7};
-////    int num[] = {10,20,15,30,21};
+ //   int c[8] = {6,7,8,0,0,0,0};
+   // int num[] = {1300,0,20,1,15,50, -1,30,21,200};
+   // int num1[] = {1,2,3,5};
+   // MergeTwoArray(c, num1, 3, 7,4);
+    //findMinMax(num, 10);
 ////    cout << findPeak(num, 5);
 ////    int r[2] = {0,0};
 ////   // findKTimes(c, 15, 3);
