@@ -20,11 +20,11 @@ private:
 
 };
 
-int main(){
+//int main(){
 
-    singleton::getInstance().doSomething();
-    singleton::getInstance().print();
-    singleton::getInstance().doSomething();
-    singleton::getInstance().print();
+//    singleton::getInstance().doSomething();
+ //   singleton::getInstance().print();
+ //   singleton::getInstance().doSomething();
+ //   singleton::getInstance().print();
 
-}
+//}
