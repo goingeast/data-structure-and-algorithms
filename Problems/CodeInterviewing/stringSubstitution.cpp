@@ -9,13 +9,14 @@ using namespace std;
 
 string StringParse(string testStr, vector<string> & fn, vector<string>& rn){
     size_t pos1 = testStr.find(';');
-    string originStr = testStr.substr(0, pos1);
+    string originStr = testStr.substr(0, pos1); // parse string befew ';'
+     
     string temp = testStr.substr(pos1 + 1) + ',';
     
     size_t delimiterPos  = temp.find(',');
     int i = 1;
     
-    while(delimiterPos != string::npos && i){
+    while(delimiterPos != string::npos && i){    // get replace string info
         cout << temp.substr(0, delimiterPos) << endl;
         if(i%2 == 1)
             fn.push_back(temp.substr(0, delimiterPos));
@@ -36,7 +37,7 @@ string StringSubstitute(string testCase){
     vector<string> rn;
     vector<string> fn;
     
-    modified = StringParse(testCase, rn, fn);     // parse string, get string will be modified
+    modified = StringParse(testCase, fn, rn);     // parse string, get string will be modified
                                                   // and strings to be used
     string temp = modified;           
     
@@ -60,14 +61,17 @@ string StringSubstitute(string testCase){
 
 int main(int argc, char* argv[]){
     ifstream testFile;
-    string testCase ="10011011001;0110,1001,1001,0,10,11";
-    if(argc == 2)
-        testFile.open(argv[1]);
+    string testCase ="10011011001;0110,1001,1001,1,10,11";
+    //if(argc == 2)
+        testFile.open("data.txt");
         
     if(testFile.is_open()){
         while(testFile.good()){
             getline(testFile, testCase);
-            cout << StringSubstitute(testCase);
+            cout << StringSubstitute(testCase) << endl;
         }
-    }
+    }else
+        cout << "can not open file";
+    
+    return 0;
 }
