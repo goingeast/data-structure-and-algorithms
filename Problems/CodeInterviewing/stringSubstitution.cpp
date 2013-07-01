@@ -1,4 +1,5 @@
-//
+// haoru zhao
+// 07/01/2013
 
 #include<iostream>
 #include<fstream>
@@ -58,7 +59,7 @@ string StringSubstitute(string testCase){
     }
     return modified;
 }
-
+#ifdef STR_SUB
 int main(int argc, char* argv[]){
     ifstream testFile;
     string testCase ="10011011001;0110,1001,1001,1,10,11";
@@ -75,3 +76,4 @@ int main(int argc, char* argv[]){
     
     return 0;
 }
+#endif

@@ -52,8 +52,9 @@ string numToString(int number){
     }
     return ret;
 }
-
+#ifdef NUMTOSTRING
 int main(){
     int a = 12234345;
     cout << numToString(a);
 }
+#endif
