@@ -1,3 +1,6 @@
+// haoru zhao
+// Binary Tree problem
+
 #include<iostream>
 #include<deque>
 #include<queue>
@@ -79,13 +82,15 @@ bool sysmeticTree(TreeNode * root1, TreeNode * root2){
     return sysmeticTree(root1->left, root2->right) 
             && sysmeticTree(root1->right, root2->left);
 }
+#ifdef BINARY_TREE
 
+int main(){
+    int a = 5;
+    int* p = &a;
+    func(p);
+    cout << *p << ' ';
+    func1(p);
+    cout << *p ;
+}
 
-////int main(){
-//    int a = 5;
-//    int* p = &a;
-//    func(p);
-//    cout << *p << ' ';
-//    func1(p);
-//    cout << *p ;
-//}
+#endif
