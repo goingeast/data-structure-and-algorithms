@@ -22,7 +22,7 @@ char GetMthToLast(string testCase){
         return resultList[resultList.size() - 1 - m];
     
 }
-
+#ifdef FFF_
 int main(int argc, char* argv[]){
     ifstream testFile;
     string testCase ="";
@@ -40,4 +40,4 @@ int main(int argc, char* argv[]){
     
     return 0;
 }
-
+#endif

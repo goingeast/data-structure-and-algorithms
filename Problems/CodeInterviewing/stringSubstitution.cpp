@@ -4,8 +4,8 @@
 #include<iostream>
 #include<fstream>
 #include<vector>
+#include<string>
 using namespace std;
-
 
 
 string StringParse(string testStr, vector<string> & fn, vector<string>& rn){
@@ -18,7 +18,6 @@ string StringParse(string testStr, vector<string> & fn, vector<string>& rn){
     int i = 1;
     
     while(delimiterPos != string::npos && i){    // get replace string info
-        cout << temp.substr(0, delimiterPos) << endl;
         if(i%2 == 1)
             fn.push_back(temp.substr(0, delimiterPos));
         else
@@ -59,21 +58,25 @@ string StringSubstitute(string testCase){
     }
     return modified;
 }
-#ifdef STR_SUB
+#ifdef STRING_
 int main(int argc, char* argv[]){
     ifstream testFile;
-    string testCase ="10011011001;0110,1001,1001,1,10,11";
-    //if(argc == 2)
-        testFile.open("data.txt");
+    string testCase;
+    if(argc == 2)
+        testFile.open(argv[1]);
         
     if(testFile.is_open()){
         while(testFile.good()){
             getline(testFile, testCase);
-            cout << StringSubstitute(testCase) << endl;
+            if(testCase.length() == 0)
+                continue;
+            else
+                cout << StringSubstitute(testCase) << endl;
         }
     }else
         cout << "can not open file";
     
     return 0;
 }
+
 #endif
