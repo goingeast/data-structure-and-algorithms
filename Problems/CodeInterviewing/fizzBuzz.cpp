@@ -74,7 +74,7 @@ void printFizzBuzz(string testCase){
     }
     cout << endl;
 }
-    
+#ifdef FIZZ_BUZZ   
 int main(int argc, char* argv[]){
     ifstream testFile;
     string testCase ="";
@@ -95,4 +95,4 @@ int main(int argc, char* argv[]){
     return 0;
 }
 
-
+#endif

@@ -5,8 +5,11 @@
 #include<deque>
 #include<queue>
 #include<limits>
+#include<tr1/unordered_map>
+#include <stack>
 
 using namespace std;
+using namespace std::tr1;
 
 class TreeNode{
 public:
@@ -84,7 +87,7 @@ int getHeight(TreeNode* node){
 bool isBalanced(TreeNode* node){
     return getHeight(node) != -2;
 }
-/////
+///////bad idea O(n^2)
 int _maxHeight(TreeNode* &node){
     if(node == NULL)
         return 0;
@@ -107,7 +110,28 @@ bool _isBalanced(TreeNode* node){
         return _isBalanced(node->left)&&_isBalanced(node->right);
     
 }
+/* optimized solution
+ */
 
+bool __isBalanced(TreeNode* node, int* height){
+    int lh = 0, rh = 0;
+    bool leftTreeBalanced = false;
+    bool rightTreeBalanced = false;
+    if(node == NULL){
+        *height = 0;
+        return true;     
+    }
+    
+    leftTreeBalanced = __isBalanced(node->left, &lh);
+    rightTreeBalanced = __isBalanced(node->right, &rh);
+    
+    *height = ( lh > rh? lh : rh ) + 1;
+    
+    if(abs(lh - rh) >= 2)
+        return false;
+    else
+        return leftTreeBalanced && rightTreeBalanced;
+}
 
 /*
  */
@@ -144,7 +168,7 @@ bool checkBST(TreeNode* n, int min, int max){
 bool isBST(TreeNode* n){
     return checkBST(n, -1000, 1000);
 }
-/* build tree from pre-order sequence
+/* build bst tree from pre-order sequence
  */
 TreeNode* builder(int pre[], int size, int* preIndex, int key, int min, int max){
     if(*preIndex >= size)
@@ -168,6 +192,76 @@ TreeNode* buildTreeFromPreOrder(int pre[], int size){
 }
 
 
+/* find a pair of nodes in BINARY TREE, their sum is equal to K
+ * 
+ * method, use unordered_map, time O(n), space O(n)
+ *  
+ */
+bool check2Sum(unordered_map<int, TreeNode*>& hashmap, TreeNode* node, int k){
+    if(node == NULL)
+        return false;
+    if(hashmap.count(k - node->data) == 0){
+        hashmap.insert(make_pair<int, TreeNode*>(node->data, node));
+        check2Sum(hashmap, node->left, k);
+        check2Sum(hashmap, node->right, k);
+    }else{
+        cout<< node->data;
+        cout << hashmap.find(k - node->data)->first;
+    }
+}
+
+/*
+ * the function returns true if there is a pair with sum equals to target sum
+ * 
+ * 1. we can also use hashmap
+ * 2. we can convert it to double linked list
+ * 3. we can do inorder traverse from left to right, and from right to left,'
+ *    just like sorted array
+ */
+
+void inorderTraverseWithoutRercursive( TreeNode* root){
+    stack<TreeNode*> aStack;
+    bool done = false;
+    TreeNode* currNode = root;
+    while(done == false){
+        if(currNode != NULL){
+            aStack.push(currNode);
+            cout << currNode->data;
+            currNode = currNode->left;
+        }else{
+            if(!aStack.empty()){
+                currNode = aStack.top();
+                aStack.pop();
+                //cout << currNode->data;
+                currNode = currNode->right;
+                
+            }else
+                done = true;
+        }
+    }
+}
+
+void preorderTraverseIterative(TreeNode* root){
+    if(root == NULL)
+        return;
+    stack<TreeNode*> aStack;
+    aStack.push(root);
+    while(!aStack.empty()){
+       TreeNode* node = aStack.top();
+       aStack.pop();
+       cout << node->data;
+       if(node->right)
+           aStack.push(node->right);
+       if(node->left)
+           aStack.push(node->left);
+    }
+}
+
+bool check2SumBinaryTree(int k, TreeNode* root){
+    unordered_map<int, TreeNode*> hashmap;
+    return check2Sum(hashmap, root,k);
+}
+
 //#ifdef BINARY_TREE
 
 int main(){
@@ -175,26 +269,31 @@ int main(){
     TreeNode* a = new TreeNode(1,a1, NULL);
     
     TreeNode* b = new TreeNode(4);
-    TreeNode* c = new TreeNode(2,NULL,b);
+    TreeNode* c = new TreeNode(2,a,NULL);
     
     TreeNode* d = new TreeNode(5);
     TreeNode* root = new TreeNode(3,c,d);
     
-    cout << isBST(root);
-    cout << maxHeight(root);
-    int pre[]={3, 2, 1, 4, 5};
-    TreeNode* x = buildTreeFromPreOrder(pre, 5);
-    cout << endl;
-    ///
-    if(_isBalanced(a))
-        cout << "balanced";
-    else
-        cout << "no";
-    
-    if(_isBalanced(c))
-        cout << "balanced";
-    else
-        cout << "no";
+//    cout << isBST(root);
+//    cout << maxHeight(root);
+//    int pre[]={3, 2, 1, 4, 5};
+//    TreeNode* x = buildTreeFromPreOrder(pre, 5);
+//    cout << endl;
+//    ///
+//    int height = 0;
+//    int height1 = 0;
+//    if(__isBalanced(a, &height))
+//        cout << "balanced";
+//    else
+//        cout << "no";
+//    
+//    if(__isBalanced(c, &height1))
+//        cout << "balanced";
+//    else
+//        cout << "no";
+    //check2SumBinaryTree(7, root);
+    inorderTraverseWithoutRercursive(root);
+    preorderTraverseIterative(root);
 }
 
 //#endif

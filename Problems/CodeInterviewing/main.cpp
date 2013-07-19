@@ -505,7 +505,7 @@ bool checkPalindrome2(string str){
     return true;
 }
 ///////////////////////////////////////
-//reverse string with words, if we use string lib
+// string with words, if we use string lib
 //
 void _reverse1(char* str){
     if(!str)
@@ -766,6 +766,8 @@ int zeroNum2(int N){
     return ret;
 }
 
+
+// 
 void MergeTwoArray(int a[], int b[], int sizeA,int total,int sizeB){
     int i = sizeA - 1;
     int j = sizeB - 1;
