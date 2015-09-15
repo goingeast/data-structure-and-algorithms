@@ -38,3 +38,23 @@ void circleMidpoint(int xCenter, int yCenter, int radius)
             circlePoints(xCenter, yCenter, x, y, pix);
         }
     }
+def draw_circle_bi_search(r2):
+    result = Set([])
+    x = 1
+    y = 0
+    while x*x <= r2:
+        y_start = 0
+        y_end = x
+        while y_start <= y_end:
+            y_mid = y_start+(y_end-y_start)/2
+            if x*x + y_mid*y_mid == r2:
+                result.update(Set([(x,y_mid),(x,-y_mid),(-x,-y_mid),(-x,y_mid),(y_mid,x),(y_mid,-x),(-y_mid,-x),(-y_mid,x)]))
+                break
+            elif x*x + y_mid*y_mid < r2:
+                y_start = y_mid+1
+            else:
+                y_end = y_mid-1
+                
+                 
+        x+=1
+    return result
