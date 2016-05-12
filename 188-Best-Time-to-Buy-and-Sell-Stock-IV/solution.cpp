@@ -11,7 +11,7 @@ public:
 
         //local[i][j] means we sell on ith day and then we have jth trade
         
-        //local[i][j] = max(global[i-1][j] + max(diff, 0) , local[i-1][j] + diff)
+        //local[i][j] = max(global[i-1][j-1]  , local[i-1][j] + diff)
         int len = prices.size();
         if(len == 0) return 0;
         
