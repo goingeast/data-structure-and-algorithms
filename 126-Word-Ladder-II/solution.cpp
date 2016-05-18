@@ -1,6 +1,6 @@
 class Solution {
 public:
-    vector<vector<string>> findLadders(string beginWord, string endWord, unordered_set<string> &dict) {
+    vector<vector<string>> findLadders(string start, string end, unordered_set<string> &dict) {
         
         vector<vector<string> > res;
         dict.insert(end);
