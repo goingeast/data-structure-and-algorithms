@@ -1,27 +1,45 @@
 class Solution {
 public:
-    int longestIncreasingPath(vector<vector<int> >& matrix) {
-        if (matrix.empty() || matrix[0].empty()) return 0;
-        int res = 1, m = matrix.size(), n = matrix[0].size();
-        vector<vector<int> > dp(m, vector<int>(n, 0));
-        for (int i = 0; i < m; ++i) {
-            for (int j = 0; j < n; ++j) {
-                res = max(res, dfs(matrix, dp, i, j));
-            }
+    int longestIncreasingPath(vector<vector<int>>& matrix) {
+        int rowSize = matrix.size();
+        int colSize = rowSize > 0 ? matrix[0].size() : 0;
+        vector<vector<int>> state(rowSize, vector<int>(colSize,0));
+
+        int ret = 0;
+        for(int i = 0; i < rowSize; ++i){
+        	for(int j = 0; j < colSize; ++j){
+        		if(state[i][j] == 0)
+        			dfs(matrix, i, j, ret, state);
+        	}
         }
-        return res;
+        return ret;
     }
-    int dfs(vector<vector<int> > &matrix, vector<vector<int> > &dp, int i, int j) {
-        if (dp[i][j]) return dp[i][j];
-        vector<vector<int> > dirs = {{0, -1}, {-1, 0}, {0, 1}, {1, 0}};
-        int mx = 1, m = matrix.size(), n = matrix[0].size();
-        for (auto a : dirs) {
-            int x = i + a[0], y = j + a[1];
-            if (x < 0 || x >= m || y < 0 || y >= n || matrix[x][y] <= matrix[i][j]) continue;
-            int len = 1 + dfs(matrix, dp, x, y);
-            mx = max(mx, len);
-        }
-        dp[i][j] = mx;
-        return mx;
+
+    int dfs(vector<vector<int>>& matrix, int row, int col, int& maxlength, vector<vector<int>>& state){
+    	if(state[row][col] != 0)
+    		return state[row][col];
+    		
+    	int len1=0, len2=0, len3=0, len4=0;
+
+    	if((row + 1) < matrix.size() && matrix[row+1][col] > matrix[row][col]){
+    		len1 = dfs(matrix, row+1, col, maxlength,state);
+    	}
+
+    	if((row - 1) >= 0 && matrix[row - 1][col] > matrix[row][col]){
+    		len2 = dfs(matrix, row-1, col, maxlength,state);
+    	}
+
+    	if((col + 1) < matrix[0].size() && matrix[row][col+1] > matrix[row][col]){
+    		len3 = dfs(matrix, row, col+1, maxlength,state);
+    	}
+
+    	if((col - 1) >= 0 && matrix[row][col-1] > matrix[row][col]){
+    		len4 = dfs(matrix, row, col-1, maxlength,state);
+    	}
+    	state[row][col] =  max(max(max(len1, len2), len3), len4);
+        state[row][col]++;
+ 
+    	maxlength = max(state[row][col], maxlength);
+    	return state[row][col];
     }
 };
