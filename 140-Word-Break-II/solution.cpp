@@ -15,14 +15,11 @@ public:
         for (int i = start; i < s.size(); ++i) {
             string word = s.substr(start, i - start + 1);
             if (wordDict.find(word) != wordDict.end() && possible[i + 1]) {
-                string temp = out;
-                //out.append(word).append(" ");
-                out.push_back(word);
-                out.push_back(" ");
+                out.append(word).append(" ");
                 int oldSize = res.size();
                 wordBreakDFS(s, wordDict, i + 1, possible, out, res);
                 if (res.size() == oldSize) possible[i + 1] = false;
-                out = temp;
+                out.resize(out.size() - word.size() - 1);
             }
         }
     }
