@@ -16,7 +16,8 @@ public:
             string word = s.substr(start, i - start + 1);
             if (wordDict.find(word) != wordDict.end() && possible[i + 1]) {
                 string temp = out;
-                out.append(word).append(" ");
+                //out.append(word).append(" ");
+                out += word + ' ';
                 int oldSize = res.size();
                 wordBreakDFS(s, wordDict, i + 1, possible, out, res);
                 if (res.size() == oldSize) possible[i + 1] = false;
