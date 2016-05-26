@@ -1,0 +1,1304 @@
+1. 给一个数组，返回左边之和等于右边之和的那个index， 没有就返回-1，比如{1,2,3,2,1}， 返回2
+
+//最优的解法应该是先算出所有元素的和，然后从左向右扫描，左边的和累加，右边的和累减。直到发现左边的和等于右边的和。
+
+2. 第二题 ：给了一个Person class， 有score和nextSnap两个属性，每个Person有一个朋友的list，也就是nextSnap，
+输入是（Person， maxStep）， 在maxStep步数以内算max score，注意的是下一个Friend可能会指向上一个Person，要注意回溯的问题
+
+struct Person{
+	int score;
+	vector<Person*> nextSnap;
+	Person(int val) : score(val), Person(){}
+};
+
+class Solutin{
+public:
+	int getMaxScore (Person* p, int maxStep){
+		maxSteps = maxStep;
+		res = INT_MIN;
+		dfs(p);
+		return res;
+	}
+private:
+	int maxSteps;
+	int cnt;
+	int res;
+	unordered_set<Person*> s;
+
+	void dfs(Person* p){
+		if(cnt==maxSteps || s.count(p))	return;
+		res = max(res, p->score);
+		cnt++;
+		s.insert(p);
+		for(auto n : p->nextSnap){
+			dfs(n);
+		}
+	}
+
+};
+
+3. 一个string, 有空格，需要reverse string中所有的word
+//开头结尾没空格，中间用单一空格分开的解法
+class Solution {
+public:
+    void reverseWords(string &s) {
+        int i=0, j=0;
+        while(j<=s.size()){
+            if(j==s.size()|| s[j]==' '){
+                reverse(s, i, j-1);
+                i = j+1;
+            }
+            j++;
+        }
+        reverse(s, 0, s.size()-1);
+    }
+private:
+    void reverse(string& s, int left, int right){
+        while(left<right) swap(s[left++], s[right--]);
+    }
+};
+//开头结尾有空格，中间可能有多个空格分开的解法
+class Solution {
+public:
+    void reverseWords(string &s) {
+        int i=0, j=0, k=0, wordCount=0;
+        while(true){//each round reverse one word
+            while(i<s.size() && s[i]==' ')  i++;//pass ' ' 
+            if(i==s.size()) break;
+            if(wordCount) s[j++] = ' ';//add empty before adding new word to the final string
+            k = j;//same beginning of word
+            while(i<s.size() && s[i]!=' ') s[j++] = s[i++];//extract word
+            reverseWord(s, k, j-1);
+            wordCount++;
+        }
+        s.resize(j);
+        reverseWord(s, 0, j-1);
+    }
+private:
+    void reverseWord(string& s, int i, int j){
+        while(i<j)  swap(s[i++], s[j--]);
+    }
+};
+
+4. task schedule
+class Solution {
+public:
+    vector<int> findOrder(int numCourses, vector<pair<int, int>>& prerequisites) {
+        auto g = vector<vector<int>>(numCourses, vector<int>());
+        vector<int> res;
+        auto in = vector<int>(numCourses, 0);
+        queue<int> q;
+        
+        for(auto& p : prerequisites){
+            g[p.second].push_back(p.first);
+            in[p.first]++;
+        }
+        
+        for(int i=0; i<numCourses; i++){
+            if(!in[i])  q.push(i);
+        }
+        
+        while(!q.empty()){
+            auto t = q.front();
+            res.push_back(t);
+            q.pop();
+            for(auto j : g[t]){
+                in[j]--;
+                if(!in[j])  q.push(j);
+            }
+        }
+        
+        if(res.size()!=numCourses)  res.clear();
+        
+        return res;
+    }
+};
+
+5. 问题一个走迷宫问题。给了一个矩阵，"1"代表起点，位于左上角；"9"代表重点，位于右下角；"0"代表通路，"5"代表墙。
+矩阵长得是这样
+[
+  [1, 5, 5, 5, 5, 0],
+  [0, 5, 0, 5, 5, 0],
+  [0, 5, 0, 0, 0, 0],
+  [0, 5, 0, 0, 5, 0],
+  [0, 0, 0, 5, 0, 9]
+]
+设计一个算法，看看这个迷宫能不能从起点走到重点。
+
+class Solution{
+public:
+	bool mazeSolver(vector<vector<int>> grid){
+		return dfs(grid, 0, 0);
+	}
+
+private:
+	vector<pair<int, int>> dirs = {{1,0},{-1,0},{0,1},{0,-1}};
+	unordered_set<int> can_walk = {0, 9};
+
+	bool dfs(vector<vector<int>>& grid, int row, int col){
+		if(grid[row][col]==9)	return true;
+		grid[row][col] = -1;
+		for(auto& dir : dirs){
+			int x = row+dir.first;
+			int y = col+dir.second;
+			if(x>=0 && x<grid.size() && y>=0 && y<grid[0].size() && can_walk.count(grid[x][y]))
+				if(dfs(grid, x, y))	return true;
+		}
+		return false;
+	}
+};
+[
+	[1, 5, 5, 5, 5, 0],
+	[0, 5, 0, 5, 5, 0],
+	[0, 5, 0, 0, 5, 0],
+	[0, 5, 0, 0, 5, 0],
+	[0, 0, 0, 5, 0, 9]
+]
+6. 和5一样，但是还出了一题， 就是墙可以打穿，问最少打穿多少墙可以到达终点。
+
+class Solution{
+public:
+    int nWalls(vector<vector<int>> grid){
+        queue<pair<int, int>> qwall;
+        queue<pair<int, int>> qnode;
+        vector<pair<int, int>> dirs = {{1,0},{-1,0},{0,1},{0,-1}};
+        vector<vector<int>> visited(grid.size(), vector<int>(grid[0].size(), false));
+        int wallCnt = -1;
+        qwall.push({0,0});
+        while(!qwall.empty()){
+            wallCnt++;
+            int n = qwall.size();
+            for(int i=0; i<n; i++){
+                int sx = qwall.front().first;
+                int sy = qwall.front().second;
+                visited[sx][sy] = true;
+                qnode.push({sx, sy});
+                qwall.pop();
+                while(!qnode.empty()){
+                    int nx = qnode.front().first;
+                    int ny = qnode.front().second;
+                    qnode.pop();
+                    visited[nx][ny] = true;
+                    if(grid[nx][ny]==9) return wallCnt;
+                    for(auto& dir : dirs){
+                        int x = nx + dir.first;
+                        int y = ny + dir.second;
+                        if(x<0 || x>= grid.size() || y<0 || y>=grid[0].size() || visited[x][y]) continue;
+                        if(grid[x][y]==0 || grid[x][y]==9)   qnode.push({x,y});
+                        if(grid[x][y]==5)   qwall.push({x,y});
+                    }
+                }
+            }
+        }
+    }
+};
+
+7. N-Queue
+
+class Solution {
+public:
+    vector<vector<string>> solveNQueens(int n) {
+        helper(n, 0);
+        return res;
+    }
+private:
+    vector<vector<string>>  res;
+    vector<string>  entry;
+    vector<int> usedCol;
+    
+    void helper(int n, int row){
+        if(row==n){
+            res.push_back(entry);
+            return;
+        }
+        
+        for(int col=0; col<n; col++){
+            if(isValid(row, col)){
+                string thisRow(n, '.');
+                thisRow[col] = 'Q';
+                entry.push_back(thisRow);
+                usedCol.push_back(col);
+                helper(n, row+1);
+                entry.pop_back();
+                usedCol.pop_back();
+            }
+        }
+    }
+    
+    bool isValid(int row, int col){
+        for(int i=0; i<usedCol.size(); i++){
+            if(col==usedCol[i] || abs(row-i)==abs(col-usedCol[i]))
+                return false;
+        }
+        return true;
+    }
+};
+
+8. 给一个string,可以add/delete/change，还可以combine几种来使他变为合法的palindrome。比如：ebabc可以先删了中间的a再把c改成e
+
+class Solution{
+public: //
+	int toPalidrome(string s){
+		vector<vector<int>>  dp(s.size(), vector<int>(s.size()));
+		for(int i=0; i<s.size(); i++){
+			for(int j=i; j>=0; j--){
+				if(i-j==0)	dp[j][i] = 0;
+				else if(i-j==1)	dp[j][i] = s[j]==s[i] ? 0 : 1;
+				else{
+					if(s[j]==s[i])	dp[j][i] = dp[j+1][i-1];
+					else dp[j][i] = min(dp[j+1][i-1], min(dp[j+1][i], dp[j][i-1])) + 1;
+				}
+			}
+		}
+		return dp[0][s.size()-1];
+	}
+};
+
+8. print matrix diagonalOrder
+
+9. 啊看了一下，我描述有偏差~应该是：
+// f1  start  0
+// f2  start  2
+// f1  start  5
+// f1  end   7
+// f2  end  10
+// f3  start  11
+// f3  end   12
+// f1  end   15
+// f4  start  16
+// f4  end   19. 1point3acres.com/bbs
+
+// asuming there is only one CPU.
+// f1: [0,2], [5, 7], [10, 11], [12 15]  
+// f2: [2,5], [7, 10]
+// f3: [11, 12]
+// f4: [16, 19]
+
+// 10.不知道是不是leetcode原题，我没见到过，求见过的给个link. visit 1point3acres.com for more.
+// 题目：A跟B在play game，从int[]里拿数字
+// A：拿第一个/最后一个，都有可能
+// B：greedy，总拿第一个/最后一个中最大的
+// . 1point3acres.com/bbs
+// A先开始，然后B，轮流，直到拿完. 鐗涗汉浜戦泦,涓€浜╀笁鍒嗗湴
+// 求A拿到的最大. visit 1point3acres.com for more.
+
+// 举个例子：. visit 1point3acres.com for more.
+// {3, 7, 2, 1}
+// A: {3, 1} -- 4
+// B: {7, 2} -- 9
+
+// A: {1, 7} -- 8. more info on 1point3acres.com
+// B: {3, 2} -- 5.鐣欏璁哄潧-涓€浜�-涓夊垎鍦�
+// 答案是8
+
+// 11维的frog跳石头问题
+// //    0   1    2   3     4     5    6    7     8    9    10
+
+// // {'F', 'R', 'R', 'R', 'W', 'W', 'R', 'W', 'R','W', 'O'};
+// input: F R R R R R W W R W O and velocity = 1
+// output: true/false
+// 意思是有一只青蛙在 F然后他的 起始可以跳步数是1，但是他在每一个石头上有决定自己走 （+1， 0， -1）步的权
+// 比如这个例子青蛙可以从0->1(v=1) 然后1->3(v+1 = 2) 然后 3->6(v+1 = 3)然后6->8(v-1= 2)然后8->10(v = 2)
+// 当然这是一个相当好的 test case，需要注意的是不要assume你要踩所有的石头。我开始没注意，后来才纠结出来。
+// 简单写一下dp公式:
+// dp[v] = dp[i-(v+1)][v+1] || dp[i-(v-1)][v-1] || dp[i-v][v]
+
+// 然后面试官follow up  2D的池塘，idea就是拿着终点位置和assume的velocity要写一个helper generate出所有可能的起点。 然后OR所有。
+// 大家加油！！！！！！！！
+9. 给一个int的matrix，里面只有0和1，matrix[i][j]表示i和j是朋友，如果是0表示两人不是朋友，是朋友的分成一个组，问能分几组。
+比如1和2是朋友，3和他们都不是朋友，那么就是2组，return 2就可以
+
+class Solution{
+public:
+	countGroups(vector<vector<int>> matrix){
+		vector<int>	roots(matrix.size(), -1);
+		for(int i=0; i<matrix.size(); i++){
+			int rootA = findRoot(roots, i);
+			for(int j=0; j<matrix[0].size(); j++){
+				if(matrix[i][j]==0)	continue;
+				int rootB = findRoot(roots, j);
+				if(rooA!=rootB)	root[rootB] = rootA;
+			}
+		}
+		int res = 0;
+		for(auto n : roots){
+			if(n==-1)	res++;
+		}
+		return res;
+	}
+private:
+	int findRoot(vector<int> roots, int i){
+		while(roots[i]!=-1)	i = roots[i];
+		return i;
+	}
+};
+
+10. 给一行String input，其中包括了若干条数据。每个数据的格式是（X，Y），代表一条从X指向Y的边。
+要求是根据这样的输入，构建并打印二叉树的in-order traversal。注意只用打印就好。
+同时，如果输入不合法，停止并打印错误。错误包括：有环，有大于两个子节点，有多个父节点，输入包含重复的边，等等
+struct TreeNode{
+    int val;
+    TreeNode *left, *right;
+    TreeNode(int v) : val(v), left(nullptr), right(nullptr){}
+};
+
+class Solution{
+public:
+    TreeNode* buildTree(pair<int, int> edges){
+        int n = edges.size()+1;
+        vector<int> roots(n, -1);
+        for(auto& edge : edges){
+            if(!m.count(edge.first))    m[edge.first] = new TreeNode(edge.first);
+            if(!m.count(edge.second))   m[edge.second] = new TreeNode(edge.second);
+            if(!m[edge.first]->left)    m[edge.fist]->left = m[edge.second];
+            if(m[edge.first]->left && m[edge.fist]->left->val == edge.second)   return -1;//duplicate edge
+            else if(!m[edge.first]->right)   m[edge.first]->right = m[edge.second];
+            else return -2;//more than two children
+
+            if(roots[edge.second]!=-1)  return -3;//多个父节点
+            int rootA = findRoot(roots, edge.first);
+            int rootB = findRoot(roots, edge.second);
+            if(rootA==rootB)    return -4;//existing circle
+            root[rootB] = rootA;
+        }
+        return m[findRoot(roots, 0)];
+    }
+
+private:
+    unordered_map<int, TreeNode*> m;
+    int findRoot(vector<int>& roots, int i){
+        while(roots[i]!=-1) i = roots[i];
+        return i;
+    }
+};
+
+11. valid palindrome
+
+class Solution {
+public:
+    bool isPalindrome(string s) {
+        if(s.size()==0) return true;
+        string ss;
+        for(auto c : s){
+            if(c>='a' && c<='z') ss+=c;
+            if(c>='A' && c<='Z') ss+=(c-'A'+'a');
+            if(isdigit(c)) ss+=c;
+        }
+        auto it=ss.begin();
+        auto rit=ss.rbegin();
+        while(it!=ss.end()){
+            if(*it!=*rit)   return false;
+            it++;
+            rit++;
+        }
+        return true;
+    }
+};
+
+12. Given a M X N grid, a random cell in the grid (coordinate <a, b> for example), 
+find number of ways you can reach top-left corner in k steps, assuming you can move in any direction. 
+class Solution{
+public:
+	int numOfWays(vector<vector<int>> grid, int ex, int ey, int sx, int sy, int k){
+		int m = grid.size();
+		int n = grid[0].size();
+		vector<vector<vector<int>>>	dp(k, vector<vector<int>>(m, vector<int>(n, 0)));
+		vector<pair<int, int>> dirs = {{1,0},{-1,0},{0,1},{0,-1},{1,1},{1,-1},{-1,1},{-1,-1}};
+		dp[0][sx][sy] = 1;
+		for(int step = 1; step <=k; step++){
+			for(int row = 0; row < m; row++){
+				for(int col =0; col < n; col++){
+					for(auto& dir : dirs){
+						int x = row + dir.first;
+						int y = col + dir.second;
+						if(x>=0 && x<m && y>=0 && y<n)	dp[step][row][col] += dp[step-1][x][y];
+					}
+				} 
+			}
+		}
+		return dp[k][ex][ey];
+	}
+};
+
+
+
+13. AB两个人轮流取 都只能从头或者尾里选一个取， A 先。 B采用的是GREEDY方法 也就是B一定是取头、尾里面最大的那一个。问A能取到的最大值。
+比如说2 4 7 3，A可以先取3， B肯定取7，A再取4，B取2， 这样A取到的和是7。 
+另外就是A先取2， B只能在3和4里面选  B因为是GREEDY 所以肯定选4， 那么A就能取7，这样A取到的和是9。 9>7所以返回9.
+
+class Solution{
+public:
+    int takeMost(vector<int> nums){
+        if(nums.size()==0)  return 0;
+        if(nums.size()==1)  return nums[0];
+        if(nums.size()==2)  return max(nums[0], nums[1]);
+        int n=nums.size();
+        vector<int> first_remain = nums[1]>nums[n-1] ? vector<int>(nums.begin()+2, nums.end()) : vector<int>(nums.begin()+1, nums.end()-1);
+        vector<int> last_remain = nums[0]>nums[n-2] ? vector<int>(nums.begin()+1, nums.end()-1) : vector<int>(nums.begin(), nums.end()-2);
+        return max(nums[0] + takeMost(first_remain), nums[n-1] + takeMost(last_remain));
+    }
+};
+
+class Solution{
+public；
+    int takeMost(vector<int> nums){
+        vector<vector<int>> dp(nums.size(), vector<int>(nums.size()));
+        for(int len=1; len<=nums.size(); len++){
+            for(int i=0; i+len-1<=nums.size()-1; i++){
+                int j = i+len-1;
+                if(i-j==0)  dp[j][i] = nums[i];
+                if(i-j==1)  dp[j][i] = max(nums[j], nums[i]);
+                dp[j][i] = max(nums[j]+nums[j+1]>nums[i]?dp[j+2][i]:dp[j+1][i-1], nums[i]+nums[j]>nums[i-1]?dp[j+1][i-1]:dp[j][i-2]);
+            }
+        }
+    }
+};
+
+14. clone graph
+//BFS方法
+class Solution {
+public:
+    UndirectedGraphNode *cloneGraph(UndirectedGraphNode *node) {
+        if(!node)   return NULL;
+        unordered_map<UndirectedGraphNode*, UndirectedGraphNode*>   m;
+        queue<UndirectedGraphNode*> q;
+        
+        UndirectedGraphNode* clone = new UndirectedGraphNode(node->label);
+        m[node]=clone;
+        
+        q.push(node);
+        
+        while(!q.empty()){
+            UndirectedGraphNode* orig = q.front();
+            q.pop();
+            UndirectedGraphNode* cln = m[orig];
+            for(int i=0; i<orig->neighbors.size(); i++){
+                UndirectedGraphNode* nbr = orig->neighbors[i];
+                if(m.count(nbr)){
+                    cln->neighbors.push_back(m[nbr]);
+                }
+                else{
+                    UndirectedGraphNode* tmp = new UndirectedGraphNode(nbr->label);
+                    m[nbr]=tmp;
+                    q.push(nbr);
+                    cln->neighbors.push_back(tmp);
+                }
+            }
+            
+        }
+        return m[node];
+    }
+};
+
+15.word break 2
+class Solution {
+public:
+    vector<string> wordBreak(string s, unordered_set<string>& wordDict) {
+        possible = vector<bool>(s.size()+1, true);
+        helper(s, wordDict, 0);
+        return res;
+    }
+private:
+    vector<string>  res;
+    string entry;
+    vector<bool> possible;
+    
+    void helper(string s, unordered_set<string>& wordDict, int start){
+        if(start==s.size()){
+            res.push_back(entry.substr(0, entry.size()-1));//don't push the last empty space ' '
+            return;
+        }
+        for(int i=start; i<s.size(); i++){
+            string word = s.substr(start, i-start+1);
+            if(wordDict.count(word) && possible[i+1]){
+                entry.append(word).push_back(' ');
+                int oldSize = res.size();
+                helper(s, wordDict, i+1);
+                if(res.size()==oldSize) possible[i+1]=false;
+                entry.resize(entry.size()-word.size()-1);//backtrack的回溯，把添进去的word和空格删掉
+            }
+        }
+    }
+};
+
+16. integer to English words
+
+class Solution {
+public:
+    string numberToWords(int num) {
+        if(num==0)  return "Zero";
+        string res = helper(num);
+        return res.substr(1);
+    }
+private:
+    string digits[20] = {"Zero", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten", "Eleven", "Twelve", "Thirteen", "Fourteen", "Fifteen", "Sixteen", "Seventeen", "Eighteen", "Nineteen"};
+    string tens[10] = {"Zero", "Ten", "Twenty", "Thirty", "Forty", "Fifty", "Sixty", "Seventy", "Eighty", "Ninety"};
+
+    string helper(int n){
+        if(n>=1000000000)
+            return helper(n/1000000000) + " Billion" + helper(n%1000000000);
+        if(n>=1000000)
+            return helper(n/1000000) + " Million" + helper(n%1000000);
+        if(n>=1000)
+            return helper(n/1000) + " Thousand" + helper(n%1000);
+        if(n>=100)
+            return helper(n/100) + " Hundred" + helper(n%100);
+        if(n>=20)
+            return " " + tens[n/10] + helper(n%10);
+        if(n>=1)
+            return " " + digits[n];
+        return "";
+    }
+};
+
+17. basic calculator "+-*/";
+
+class Solution {
+public:
+    int calculate(string s) {
+        //在最后添加一个加号，是原来最后一个符号能够被判定
+        s += '+';
+        int res=0, d=0;
+        char sign = '+';
+        set<char> operators = {'+', '-', '*', '/'};
+        stack<int>  nums;
+        for(int i=0; i<s.size(); i++){
+            if(s[i]==' ') continue;
+            if(isdigit(s[i]))   d = d*10 + s[i] - '0';
+            if(operators.count(s[i])){
+                if(sign=='+')   nums.push(d);
+                else if(sign=='-') nums.push(-d);
+                else if(sign=='*'){
+                    int tmp = nums.top() * d;
+                    nums.pop();
+                    nums.push(tmp);
+                }
+                else{
+                    int tmp = nums.top() / d;
+                    nums.pop();
+                    nums.push(tmp);
+                }
+                sign = s[i];
+                d=0;
+            }
+        }
+        while(!nums.empty()){
+            res += nums.top();
+            nums.pop();
+        }
+        return res;
+    }
+};
+
+18. Vertical traversal BST
+
+class Solution {
+public:
+    vector<vector<int>> verticalOrder(TreeNode* root) {
+        if(!root)   return {};
+        map<int, vector<int>> m;
+        vector<vector<int>> res;
+        queue<pair<int, TreeNode*>> q;
+        q.push({0, root});
+        while(!q.empty()){
+            auto pr = q.front();
+            q.pop();
+            m[pr.first].push_back(pr.second->val);
+            if(pr.second->left)  q.push({pr.first-1, pr.second->left});
+            if(pr.second->right) q.push({pr.first+1, pr.second->right});
+        }
+        for(auto& p : m){
+            res.push_back(move(p.second));    
+        }
+        return res;
+    }
+};
+
+19. valid anagram
+
+class Solution {
+public:
+    bool isAnagram(string s, string t) {
+        if(s.size()!=t.size())  return false;
+        vector<int> smap(26,0);
+        vector<int> tmap(26,0);
+        for(int i=0; i<s.size(); i++){
+            smap[s[i]-'a']++;
+            tmap[t[i]-'a']++;
+        }
+        return smap==tmap;
+    }
+};
+
+20. big integer addition
+
+class Solution {
+public:
+    string addBinary(string a, string b) {
+        string res;
+        int len = max(a.size(), b.size());
+        int carry = 0;
+        for(int i = 0; i<len; i++){
+            int va = 0;
+            int vb = 0;
+            if(i<a.size())  va = a[a.size()-1-i] - '0';
+            if(i<b.size())  vb = b[b.size()-1-i] - '0';
+            res += (va + vb + carry) % 10 + '0';
+            carry = (va + vb + carry) / 10;
+        }
+        if(carry)   res += '1';
+        reverse(res.begin(), res.end());
+        return res;
+    }
+};
+
+21. big integer subtraction
+//假设传入两个整数，并且大减小，否则先判断大小再调用自身交换位置
+class Solution{
+public:
+	string subtract(string a, string b){
+		string res;
+        int len = max(a.size(), b.size());
+        int carry = 0;
+        for(int i = 0; i<len; i++){
+            int va = 0;
+            int vb = 0;
+            if(i<a.size())  va = a[a.size()-1-i] - '0';
+            if(i<b.size())  vb = b[b.size()-1-i] - '0';
+            res += (va - vb - carry + 10) % 10 + '0';
+            carry = (va - vb - carry + 10) < 10;
+        }
+        if(res.back()=='0')	res.pop_back();
+        reverse(res.begin(), res.end());
+        return res;
+	}
+};
+
+22. big integer multiply
+
+class Solution {
+public:
+    string multiply(string num1, string num2) {
+        string res;
+        int n1 = num1.size();
+        int n2 = num2.size();
+        vector<int> tmp(n1+n2, 0);//存每一位相乘的临时结果，最终结果最多为n1+n2位
+        int k = tmp.size()-2;//字符串的最低位是数字的最高位，临时结果最高位写在n1+n2-2，进位之后最终结果最高位在n1+n2-1，即n1+n2位
+        for(int i = 0; i < n1; i++){
+            for(int j = 0; j < n2; j++){
+                tmp[k-i-j] += (num1[i]-'0') * (num2[j]-'0');
+            }
+        }
+        int carry = 0;
+        for(int i = 0; i < n1+n2; i++){
+            tmp[i] += carry;
+            carry = tmp[i] / 10;
+            tmp[i] %= 10;
+        }
+        int i = tmp.size()-1;
+        while(tmp[i]==0)    i--;//leading 0s
+        if(i<0) return "0";//result is 0
+        for(; i >=0; i--)   res.push_back(tmp[i]+'0');
+        return res;
+    }
+};
+
+23. preorder & inorder -> tree
+
+class Solution {
+public:
+    TreeNode* buildTree(vector<int>& preorder, vector<int>& inorder) {
+        if(preorder.size()!=inorder.size()) return nullptr;
+        int n = preorder.size();
+        return buildTree(preorder, inorder, 0, n-1, 0, n-1);
+    }
+private:
+    TreeNode* buildTree(vector<int>& preorder, vector<int>& inorder, int s1, int e1, int s2, int e2){
+        if(s1>e1 || s2>e2)  return nullptr;
+        TreeNode* root = new TreeNode(preorder[s1]);
+        
+        int idx=-1;
+        for(int i=s2; i<=e2; i++){
+            if(inorder[i]==root->val)   idx=i;
+        }
+        if(idx==-1) return nullptr;
+        
+        int leftSize = idx-s2;
+        int rightSize = e2-idx;
+        
+        root->left = buildTree(preorder, inorder, s1+1, s1+leftSize, s2, idx-1);
+        root->right = buildTree(preorder, inorder, e1-rightSize+1, e1, idx+1, e2);
+        return root;
+    }
+};
+
+24. 实现 linux command line中的tab completion功能
+
+25. 找Amicable Number Pairs
+就是 数A 的所有因数(包括1，不包括A) 之和 等于 B。B的所有因数之和又刚好为A。 且 A != B.
+求[1, N] 中所有符合条件的pair
+
+class Solution {
+public:
+    vector<pair<int, int>> findAmicable (int n){
+        vector<pair<int, int>> res;
+        vector<int> sum(n+1);
+        map<int, int>   m;
+        for(int i=0; i<=n; i++){
+            sum[i] = 1;
+        }
+
+        for(int i=2; i<=n/2; i++){
+            for(int j=2*i; j<=n; j+=i){
+                sum[j] += i;
+            }
+        }
+
+        for(int i=0; i<=n; i++){
+            if(m.count(i) && m[i]==sum[i])  res.push_back({i, m[i]});
+            if(!m.count(i)) m[sum[i]] = i;
+        }
+
+        return res;
+    }  
+};
+
+26. alien dictionary
+
+class Solution {
+public:
+    string alienOrder(vector<string>& words) {
+        string res;
+        unordered_set<char> nodes;
+        set<pair<char, char>> edges;//node1->node2
+        unordered_map<char, int>    indegree;
+        queue<char> q;
+        //extract all nodes
+        for(auto w : words){
+            nodes.insert(w.begin(), w.end());
+        }
+        //extract all edges
+        for(int i=1; i<words.size(); i++){
+            for(int j=0; j<min(words[i-1].size(), words[i].size()); j++){
+                if(words[i-1][j]!=words[i][j]){
+                    edges.insert({words[i-1][j], words[i][j]});
+                    break;
+                    //can't add indegree here, could have duplicate edges
+                }
+            }
+        }
+        //initialize indegree vector for each node
+        for(auto e : edges) indegree[e.second]++;
+        
+        //for some of the nodes, we never had a chance to compare them, 
+        //in this case, they're considered as isolated node, i.e. there indegree is also 0
+        for(auto c : nodes){
+            if(indegree[c]==0){
+                q.push(c);
+                res += c;
+            }
+        }
+        while(!q.empty()){
+            char node = q.front();
+            q.pop();
+            for(auto e : edges){
+                if(e.first==node){
+                    indegree[e.second]--;
+                    if(indegree[e.second]==0){
+                        q.push(e.second);
+                        res += e.second;
+                    }
+                }
+            }
+        }
+        if(res.size()!=nodes.size())    res.clear();
+        return res;
+    }
+};
+
+27. 给了员工和老板关系，找出两个员工的共同老板;
+class Solution{
+public:
+    Employee* findLCA(Employee* root, Employee* a, Employee* b){
+        if(!root)   return nullptr;
+        if(root == a || root == b)  return root;
+        Employee *first = nullptr, *second = nullptr;
+        for(auto& sub : root->v){
+            auto LCA = findLCA(sub, a, b);
+            if(LCA){
+                if(!first)  first = LCA;
+                else if(!second)    second = LCA;
+            }
+        }
+        if(first && second) return root;
+        if(first)   return first;
+        if(second)  return second;
+    }
+};
+
+28. 给了员工老板关系，打印出每人总共的销售额
+struct Employee{
+    string name;
+    int sold;
+    int total;
+    string prefix;
+    vector<Employee*> v;
+    Employee* mng;
+
+    Employee(string s) :  name(s) {};
+    void addManager(Employee* m){
+        mng = m;
+    }
+    void addEmployee(Employee* e){
+        v.push_back(e);
+    }
+    void addSale(int num){
+        sold = num;
+        total = num;
+    }
+};
+
+struct Relation{
+    string name;
+    string boss;
+    int sold;
+    Relation(string n, string b, int s) : name(n), boss(b), sold(s) {}
+};
+
+class Solution{
+public:
+    Employee* buildTree(vector<Relation> records){
+        for(auto& relation : records){
+            if(!m.count(relation.name)){
+                m[relation.name] = new Employee(relation.name);
+            }
+            if(!m.count(relation.boss)){
+                m[relation.boss] =  new Employee(relation.boss);
+            }
+            m[relation.name]->addManager(m[relation.boss]);
+            m[relation.name]->addSale(relation.sold);
+            m[relation.boss]->addEmployee(m[relation.name]);
+        }
+        return m[""]->v[0]; 
+    }
+
+    int updateTotal(Employee* root){
+        if(root->v.empty()) return root->sold;
+        for(auto& sub : root->v){
+            root->total += updateTotal(sub);
+        }
+        return root->total;
+    }
+
+    void preorderPrint(Employee* root){
+        cout << root->prefix << root->name << " " << root->total << endl;
+        for(auto it = root->v.begin(); it!=root->v.end(); it++){
+            (*it)->prefix = root->prefix + "    ";
+            preorderPrint(*it);
+        }
+    }
+
+private:
+    map<string, Employee*> m;
+};
+
+int main(){
+    Solution sol;
+    vector<Relation> records = {
+                {"Alice","",5},
+                {"Carol","Bob",2},
+                {"David","Bob",3},
+                {"Bob","Alice",3},
+                {"Richard","Carol",5},
+                {"Tom","Carol",5},
+                {"Ferris","Eve",1},
+                {"Kim","Richard",5},
+                {"Eve","Alice",2}
+    };
+    auto ceo = sol.buildTree(records);
+    int t = sol.updateTotal(ceo);
+    assert(t==31);
+    sol.preorder(ceo);
+}
+
+29. 压缩单词，用第一个字母+长度+最后一个字母，如果有歧义就一直把前缀增长到没有歧义为止，如果这样不能缩短单词长度就返回原单词
+class TrieNode{
+public:
+        int count;
+        unordered_map<char,TrieNode*> children;
+        TrieNode(int cnt):count(cnt){};
+};
+
+class Solution {
+public:
+        void addWord(TrieNode *root, string& str, int pos){
+                if(pos==str.length()){
+                        return;
+                }
+                char ch = str[pos];
+                if(root->children.find(ch)==root->children.end()){
+                        root->children[ch] = new TrieNode(1);
+                } 
+                else{
+                        root->children[ch]->count++;
+                }
+                addWord(root->children[ch],str,pos+1);
+        }
+
+        void findAbbrev(TrieNode *root, string& str, string& path, int pos){
+                int n = str.length();
+                if(pos>=n-3){//已经可以直接用原单词了
+                        path += str.substr(pos);
+                        return;
+                }
+                char ch = str[pos];
+                if(root->children[ch]->count == 1){
+                        path += ch + to_string(n) + str[n-1];
+                } 
+                else {
+                        path += ch;
+                        findAbbrev(root->children[ch],str,path,pos+1);
+                }
+        }
+
+        vector<string> compressWord(vector<string>& strs){
+                unordered_map<string,TrieNode*> mapTrie;
+                for(auto str : strs){
+                        if(str.length()<=3){
+                                continue;
+                        }
+                        string index = str[0] + to_string(str.length()) + str.back();
+                        if(mapTrie.find(index)==mapTrie.end()){
+                                TrieNode *newNode = new TrieNode(0);
+                                mapTrie[index] = newNode;
+                        }
+                        addWord(mapTrie[index],str,0);
+                }
+
+                vector<string> result;
+                for(auto str : strs){
+                        if(str.length()>3){
+                                string index = str[0] + to_string(str.length()) + str.back();
+                                string path;
+                                findAbbrev(mapTrie[index],str,path,0);
+                                result.push_back(path);
+                        } else {
+                                result.push_back(str);
+                        }
+                }
+                return result;
+        }
+
+};
+
+int main(int argc, char** argv) {
+    
+    Solution su;
+    vector<string> words{"like", "god"  ,"internal", "me", "internet" ,"interval" ,"intension", "face", "intrusion"};
+    vector<string> res = su.compressWord(words);
+
+    for(auto s : res){
+            cout<<s<<" ";
+    }
+    cout<<endl;
+
+}
+
+
+30. 两人轮流从1~n取数加到sum里，先使sum>target的赢，问先手赢不赢
+class Solution{
+    bool canWin(int n, int target){
+        vector<int> v = vector<int>(n);
+        for(int i=1; i<=n; i++) v[i]=i;
+        int curSum = 0;
+        return dfs(v, curSum, target);
+    }
+
+private:
+    bool dfs(vector<int>& v, int& curSum, int target){
+        if(curSum > target)     return true;
+        for(int i=0; i<n; i++){
+            if(v[i]>0 && v[i]+curSum > target)    return true;
+            curSum += v[i];
+            v[i] = -v[i];
+            if(!dfs(v, curSum, target)) return true;
+            v[i] = -v[i];
+            curSum -= v[i];
+        }
+        return false;
+    }
+};
+
+31. 会议室，打印每间会议室的时间表
+
+struct Interval {
+    int start;
+    int end;
+    Interval() : start(0), end(0) {}
+    Interval(int s, int e) : start(s), end(e) {}
+};
+bool operator<(const Interval a, const Interval b){return a.start<b.start;};
+
+
+class Solution {
+public:
+    int minMeetingRooms(vector<Interval>& intervals) {
+        sort(intervals.begin(), intervals.end(), [](const Interval &a, const Interval &b){return a.start < b.start;});
+        struct grt{bool operator()(pair<int, Interval> a, pair<int, Interval> b){return a>b;}};
+        
+        // bool operator>(<pair<int, Interval> a, <pair<int, Interval> b){return a.first > b.first;};
+        priority_queue<pair<int, Interval>, vector<pair<int, Interval>>, grt> q;//最小堆
+        for (auto a : intervals) {
+            if (!q.empty() && q.top().first <= a.start){
+                m[q.top().first].push_back(q.top().second);
+                m[a.end] = m[q.top().first];
+                m.erase(q.top().first);
+                q.pop();
+                q.push({a.end, a});
+            }
+            else{
+                q.push({a.end, a});
+            }
+        }
+        int n = q.size();
+        while(!q.empty()){
+            m[q.top().first].push_back(q.top().second);
+            q.pop();
+        }
+        return n;
+    }
+private:
+    map<int, vector<Interval>>  m;
+};
+
+int main(){
+    Solution sol;
+    vector<Interval> v = {{0,30}, {5, 10}, {15, 20}};
+    auto res = sol.minMeetingRooms(v);
+    assert(res==2);
+}
+
+32. 二叉树的序列化与反序列化
+
+class Codec {
+public:
+
+    // Encodes a tree to a single string.
+    string serialize(TreeNode* root) {
+        ostringstream out;
+        serializeHelper(root, out);
+        return out.str(); 
+    }
+
+    // Decodes your encoded data to tree.
+    TreeNode* deserialize(string data) {
+        istringstream in(data);
+        return deserializeHelper(in);
+    }
+private:
+    void serializeHelper(TreeNode* root, ostringstream& out){
+        if(!root)   out << "# ";
+        else{
+            out << root->val << ' ';
+            serializeHelper(root->left, out);
+            serializeHelper(root->right, out);
+        }
+    }
+    
+    TreeNode* deserializeHelper(istringstream& in){
+        string s;
+        in >> s;
+        if(s == "#")    return nullptr;
+        TreeNode* root = new TreeNode(atoi(s.c_str()));
+        root->left = deserializeHelper(in);
+        root->right = deserializeHelper(in);
+        return root;
+    }
+};
+
+33. word pattern 2
+class Solution {
+public:
+    bool wordPatternMatch(string pattern, string str) {
+        return helper(pattern, 0, str, 0);
+    }
+private:
+    unordered_map<char, string> m;//c2s mapping
+    unordered_set<string> s;//store values in m
+    bool helper(string& pattern, int p1, string& str, int p2){
+        if(p1==pattern.size() && p2==str.size())    return true;
+        if(p1==pattern.size() || p2==str.size())    return false;
+        char c = pattern[p1];
+        for(int i=p2; i<str.size(); i++){
+            string t = str.substr(p2, i-p2+1);
+            if(m.count(c) && m[c]==t){
+                if(helper(pattern, p1+1, str, i+1)) return true;
+            }
+            else if(!m.count(c)){
+                if(s.count(t))  continue;
+                m[c]=t;
+                s.insert(t);
+                if(helper(pattern, p1+1, str, i+1)) return true;
+                m.erase(c);
+                s.erase(t);
+            }
+        }
+        return false;
+    }
+};
+
+34. DNA repeated sequence
+//其实把pattern变成数字只是为了省空间和省去字符串append, substr的时间而已
+class Solution {
+public:
+    vector<string> findRepeatedDnaSequences(string s) {
+        vector<string>  res;
+        int i=0; 
+        if(s.size()<10) return res;
+        string sequence = s.substr(0,9);
+        unordered_map<string, int> m;
+        for(int i=9; i<s.size(); i++){
+            sequence = sequence+s[i];
+            if(m.count(sequence)){
+                if(m[sequence]==1)
+                    res.push_back(s.substr(i-9,10));
+                m[sequence]++;
+            }
+            else
+                m[sequence]=1;
+            sequence = sequence.substr(1,9);
+        }
+        return res;
+    }
+};
+
+35. Matrix ZigZag Traversal
+//http://algorithm.yuanbin.me/zh-hans/problem_misc/matrix_zigzag_traversal.html
+class Solution{
+public:
+    vector<int> printZMatrix(vector<vector<int>> &matrix) {
+        vector<int> zigzag;
+        const size_t m = matrix.size(), n = matrix[0].size();
+
+        for (int i = 0; i < m + n - 1; ++i) {
+            if (i % 2 == 0) {
+                for (int y = 0;  y < n; ++y) {
+                    if (i-y >= 0 && i-y < m) {
+                        zigzag.emplace_back(matrix[i - y][y]);
+                    }
+                }
+            } else {
+                for (int x = 0; x < m; ++x) {
+                    if (i - x >= 0 && i-x < n) {
+                        zigzag.emplace_back(matrix[x][i - x]);
+                    }
+                }
+            }
+        }
+
+        return zigzag;
+    }
+};
+
+36. 一个长string s 一个短string t，问s中存不存在substr与t互为anagram
+class Solution{
+public:
+    bool hasAnagram(string s, string t){
+        if(s.size()<t.size())   return false;
+        vector<int> smap(256, 0);
+        vector<int> tmap(256, 0);
+        for(char c : t) tmap[c]++;
+        int left=0, right=0, count=0;
+        for(; right<s.size(); right++){
+            char c = s[right];
+            if(tmap[c]==0){
+                left = right+1;
+                smap = vector<int>(256, 0);
+                continue;
+            }
+            smap[c]++;
+            if(smap[c]<=tmap[c])    count++;
+            while(count>=t.size()){
+                if(smap==tmap)  return true;
+                smap[s[left]]--;
+                if(smap[s[left]]<tmap[s[left]]) count--;
+                left++;
+            }
+        }
+        return false;
+    }
+};
+
+37. different ways to add parentheses
+
+class Solution {
+public:
+    vector<int> diffWaysToCompute(string input) {
+        vector<int> res;
+        if(input.empty())   return res;
+        for(int i=0; i<input.size(); i++){
+            if(input[i]=='+' || input[i]=='-' || input[i]=='*'){
+                auto left = diffWaysToCompute(input.substr(0,i));
+                auto right = diffWaysToCompute(input.substr(i+1));
+                for(auto lv : left){
+                    for(auto rv : right){
+                        if(input[i]=='+')   res.push_back(lv+rv);
+                        if(input[i]=='-')   res.push_back(lv-rv);
+                        if(input[i]=='*')   res.push_back(lv*rv);
+                    }
+                }
+            }
+        }
+        if(res.empty()) res.push_back(atoi(input.c_str()));
+        return res;
+    }
+};
+
+38. 题目是手机上的通讯录，每条记录只有(name, number)这种pair,有些记录名字重复，有些记录号码重复，让我返回一个list<list<Record>>，
+将所有记录按人分组。比较tricky的点在于(ABC,123), (ABC, 456), (BCD, 456)
+三条记录，第一条和第三条也属于同一个人。要求时间复杂度尽量小
+
+class Solution{
+public:
+    map<string, set<string>> removeDuplicate(vector<pair<string, string>> records){
+        for(auto& pr : records){
+            g[pr.first].push_back(pr.second);
+            g[pr.second].push_back(pr.first);
+        }
+        for(auto it = g.begin(); it!=g.end(); it++){
+            if(!isName(it->first))  continue;
+            dfs(it->first, it->first);
+        }
+        return m;
+    }
+private:
+    map<string, vector<string>>  g;
+    map<string, set<string>> m;
+    set<string> visited;
+    void dfs(string root, string node){
+        if(visited.count(node)) return;
+        visited.insert(node);
+        if(!isName(node))   m[root].insert(node);
+        for(auto neighbor : g[node]){
+            dfs(root, neighbor);
+        }
+    }
+
+    bool isName(string s){
+        char c = s[0];
+        if(c>='0' && c<='9')    return false;
+        else return true;
+    }
+
+};
+
+int main(){
+    Solution sol;
+    vector<pair<string, string>> records = {{"ABC", "123"},{"ABC", "456"},{"BCD", "456"}};
+    vector<pair<string, string>> records2 = {{"a", "1"}, {"b", "1"},{"a", "2"},{"c", "3"},{"d", "3"},{"e", "4"},{"e", "5"},{"f", "6"},{"g", "7"},{"f", "7"}};
+    auto res = sol.removeDuplicate(records2);
+    return 0;
+}
+
+
+
