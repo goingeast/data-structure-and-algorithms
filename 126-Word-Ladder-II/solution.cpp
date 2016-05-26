@@ -17,7 +17,7 @@ public:
                 for (string w : words) dict.erase(w);
                 words.clear();
                 level = path.size();
-                if (level > minLevel) break;
+                //if (level > minLevel) break;
             }
             string last = path.back();
             for (int i = 0; i < last.size(); ++i) {
