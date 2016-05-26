@@ -676,32 +676,27 @@ public:
 
 22. big integer multiply
 
-class Solution {
-public:
-    string multiply(string num1, string num2) {
-        string res;
-        int n1 = num1.size();
-        int n2 = num2.size();
-        vector<int> tmp(n1+n2, 0);//存每一位相乘的临时结果，最终结果最多为n1+n2位
-        int k = tmp.size()-2;//字符串的最低位是数字的最高位，临时结果最高位写在n1+n2-2，进位之后最终结果最高位在n1+n2-1，即n1+n2位
-        for(int i = 0; i < n1; i++){
-            for(int j = 0; j < n2; j++){
-                tmp[k-i-j] += (num1[i]-'0') * (num2[j]-'0');
+string multiply(string num1, string num2) {
+        int size1 = num1.size();
+        int size2 = num2.size();
+        string result(size1+ size2, '0');
+        
+        for(int i = size1 -1; i >= 0; --i){
+            int carry = 0;
+            for(int j = size2 - 1; j >=0; --j){
+                int temp = (num1[i]-'0') * (num2[j] -'0') + (result[i+j+1]-'0') + carry;
+                result[i+j+1] = ('0' + temp % 10);
+                carry = temp/10;
             }
+            result[i] += carry;
         }
-        int carry = 0;
-        for(int i = 0; i < n1+n2; i++){
-            tmp[i] += carry;
-            carry = tmp[i] / 10;
-            tmp[i] %= 10;
+        
+        size_t startpos = result.find_first_not_of("0");
+        if (string::npos != startpos) {
+            return result.substr(startpos);
         }
-        int i = tmp.size()-1;
-        while(tmp[i]==0)    i--;//leading 0s
-        if(i<0) return "0";//result is 0
-        for(; i >=0; i--)   res.push_back(tmp[i]+'0');
-        return res;
+        return "0";
     }
-};
 
 23. preorder & inorder -> tree
 
