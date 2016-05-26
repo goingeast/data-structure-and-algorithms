@@ -30,7 +30,7 @@ public:
                         nextPath.push_back(newLast);
                         if (newLast == end) {
                             res.push_back(nextPath);
-                            minLevel = level;
+                            //minLevel = level;
                         } else paths.push(nextPath);
                     }
                 }
