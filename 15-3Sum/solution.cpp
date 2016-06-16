@@ -2,11 +2,13 @@ class Solution {
 public:
    vector<vector<int> > threeSum(vector<int> &num) {
 
-    vector<vector<int> > res;
+    vector<vector<int>> res;
+    if(num.size()  < 3)
+        return res;
 
-    std::sort(num.begin(), num.end(), less<int>());
+    std::sort(num.begin(), num.end());
 
-    for (int i = 0; i < num.size(); i++) {
+    for (int i = 0; i < num.size()-2; i++) {
 
         int target = -num[i];
         int front = i + 1;
