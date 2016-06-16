@@ -3,6 +3,7 @@ public:
     string addBinary(string a, string b){
       int sum = 0;
       string res;
+      //string ret;
       int i = a.size()-1;
       int j = b.size()-1;  
       while( i >=0 || j >=0|| sum >0){
@@ -19,8 +20,10 @@ public:
         j--;
       }
      
-      reverse(res.begin(), res.end());
-      return res;
+      //reverse(res.begin(), res.end());
+  
+      string ret(res.rbegin(), res.rend());
+      return ret;
     }
 
 };
