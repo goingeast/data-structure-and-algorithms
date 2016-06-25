@@ -37,7 +37,7 @@ public:
               return false;
      
             // Allows only distinct valued nodes 
-            if ((prev) != NULL && p->val <= (prev)->val)
+            if ((prev) && p->val <= (prev)->val)
               return false;
      
             prev = p;
