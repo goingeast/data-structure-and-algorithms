@@ -6,8 +6,11 @@ public:
         stringstream ss(path);
         while(getline(ss,tmp,'/')) {
             //if (tmp == "" or tmp == ".") continue;
-            if (tmp == ".." and !stk.empty()) stk.pop_back();
-            else if (tmp != ".." and tmp != "." && tmp != "") stk.push_back(tmp);
+            if (tmp == ".."){
+                if( !stk.empty()){
+                    stk.pop_back();
+                }
+            }else if (tmp != "." && tmp != "") stk.push_back(tmp);
         }
         for(auto str : stk) res += "/"+str;
         return res.empty() ? "/" : res;
