@@ -9,7 +9,7 @@
  */
 class Solution {
 public:
-    bool isValidBST(TreeNode *root) {
+    /*bool isValidBST(TreeNode *root) {
         return _isValidBST(root,LONG_MIN,LONG_MAX);
     }
     
@@ -21,32 +21,32 @@ public:
         }
         return _isValidBST(root->left, min, root->val)&&_isValidBST(root->right, root->val, max);
   
+    }*/
+    
+    bool isValidBST(TreeNode *root) {
+        TreeNode* prev = NULL;
+        
+        return isBSTInOrderHelper(root, prev);
     }
     
-    // bool isValidBST(TreeNode *root) {
-    //     TreeNode* prev = NULL;
+    bool isBSTInOrderHelper(TreeNode *p, TreeNode*& prev) {
         
-    //     return isBSTInOrderHelper(root, &prev);
-    // }
-    
-    // bool isBSTInOrderHelper(TreeNode *p, TreeNode** prev) {
-        
-    //     if (p != NULL)
-    //     {
-    //         if (!isBSTInOrderHelper(p->left, prev))
-    //           return false;
+        if (p != NULL)
+        {
+            if (!isBSTInOrderHelper(p->left, prev))
+              return false;
      
-    //         // Allows only distinct valued nodes 
-    //         if ((*prev) != NULL && p->val <= (*prev)->val)
-    //           return false;
+            // Allows only distinct valued nodes 
+            if ((prev) != NULL && p->val <= (prev)->val)
+              return false;
      
-    //         *prev = p;
+            prev = p;
      
-    //         return isBSTInOrderHelper(p->right, prev);
-    //     }
+            return isBSTInOrderHelper(p->right, prev);
+        }
  
-    //     return true;
-    // }
+        return true;
+    }
     
     private:
     TreeNode* prev1 =NULL;
