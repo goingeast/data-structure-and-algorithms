@@ -66,12 +66,12 @@ public:
         }
         return 0;
     }
-
+ 
     void addword(string word, unordered_set<string>& wordList, queue<string>& beingVisited ){
     	wordList.erase(word);
     	for(int i = 0; i < word.size(); ++i){
     		char letter = word[i];
-    		for(int j = 0; j < 26; ++j){
+    		for(int j = 1; j < 26; ++j){
     			word[i] = 'a' + j;
     			if(wordList.find(word) != wordList.end()){
     				beingVisited.push(word);
