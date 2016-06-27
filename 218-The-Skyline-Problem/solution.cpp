@@ -6,7 +6,11 @@ public:
             height.emplace_back(b[0], -b[2]);
             height.emplace_back(b[1], b[2]);
         }
-        sort(height.begin(), height.end());
+        sort(height.begin(), height.end(),[](const pair<int, int>& a, const pair<int, int>& b)-> bool { 
+            if(a.first == b.first){
+                return a.second < b.second;
+            }
+            return a.first < b.first;});
         multiset<int> heap;
         heap.insert(0);
         vector<pair<int, int>> res;
