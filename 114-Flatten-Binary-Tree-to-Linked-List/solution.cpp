@@ -30,6 +30,7 @@ public:
         
         flatten_helper(left, prev);
         flatten_helper(right, prev);
+        
         return NULL;
     }
 };
