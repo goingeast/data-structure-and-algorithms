@@ -16,9 +16,9 @@ public:
         
     }
     
-    TreeNode* flatten_helper( TreeNode* root, TreeNode*& prev){
+    void flatten_helper( TreeNode* root, TreeNode*& prev){
         if(root == NULL){
-            return root;
+            return;
         }
         
         TreeNode* right = root->right;
@@ -30,7 +30,5 @@ public:
         
         flatten_helper(left, prev);
         flatten_helper(right, prev);
-        
-        return NULL;
     }
 };
